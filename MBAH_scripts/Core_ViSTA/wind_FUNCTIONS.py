@@ -209,7 +209,7 @@ def depositiontrajectories(wind_angle):
     Ncww = Ncw + 2 #Grid dimensions for columns 
     section_lengths = np.zeros((Nrww, Ncww)) #lengths of each section of wind path leading to the target cell    
     path_depos = np.zeros((Nrww*Ncww, 3*(max(Nrww, Ncww)))) #Array of all the section lengths for each deposition path; 2*N because max cells a wind path can go through is √2N, so round up to 2 (or 3 for 180 degrees?!)  
-    path_cell_location_depos = np.zeros((Nrww*Ncww, 3*(max(Nrww, Ncww)))) #Position of each cell in each deposition path leading to each target cell; 2*N because max cells a wind path can go through is √2N, so round up to 2 (or 3 for 180 degrees?!)  
+    path_cell_location_depos = np.zeros((Nrww*Ncww, 3*(max(Nrww, Ncww))), dtype=int) #Position of each cell in each deposition path leading to each target cell; 2*N because max cells a wind path can go through is √2N, so round up to 2 (or 3 for 180 degrees?!)  
     
     #---------------------------------- Start ---------------------------------
     #Reverse the wind angle, to get the trajectory FROM the target cell downwind, rather than TO it    
@@ -686,7 +686,7 @@ def windspeedcalculator(sand_heights_grid, veg_grid, porosity_grid, trunks_grid,
     #-------------------------- Function setup --------------------------------     
     section_lengths = np.zeros((Nr, Nc)) #lengths of each section of wind path leading to the target cell
     path = np.zeros((Nr*Nc, 3*(max(Nr, Nc)))) #Array of all the section lengths for each path; 2*N because max cells a wind path can go through is √2N, so round up to 2
-    path_cell_location = np.zeros((Nr*Nc, 3*(max(Nr, Nc)))) #Position of each cell in each path leading to each target cell; 2*N because max cells a wind path can go through is √2N, so round up to 2       
+    path_cell_location = np.zeros((Nr*Nc, 3*(max(Nr, Nc))), dtype=int) #Position of each cell in each path leading to each target cell; 2*N because max cells a wind path can go through is √2N, so round up to 2       
     windspeed_grid = np.zeros((Nr, Nc)) #Grid of windspeed for each cell that is passed through to main module
     surface_windspeed = np.zeros(3*(max(Nr, Nc))) #Array for the actual surface windspeeds (e.g. affected by vegetation)
     L = np.zeros(3*(max(Nr, Nc))) #To fill with lengths of each cell in path, at each iteration
@@ -712,7 +712,7 @@ def windspeedcalculator(sand_heights_grid, veg_grid, porosity_grid, trunks_grid,
         for j in range(Nc):
             target_row = i; target_col = j #The row/col for which wind is being calculated
             section_lengths = np.zeros((Nr, Nc))
-            checked_cells = np.zeros((Nr*Nc*3, 2), dytpe=int) #Multiply by 3 because want one cell either side of the checked cell
+            checked_cells = np.zeros((Nr*Nc*3, 2), dtype=int) #Multiply by 3 because want one cell either side of the checked cell
             path_counter = -1        
     
             #------------------------- Define wind path intercept -------------
