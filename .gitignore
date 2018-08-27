@@ -3,5 +3,5 @@
 # ----------------------------------------------------
 
 # Ignore results files and originals scripts of the model
-Outputs/
+Output/
 Original_ViSTA_Mayaud/
