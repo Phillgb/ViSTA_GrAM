@@ -1,0 +1,7 @@
+# ----------------------------------------------------
+# List of Ignored Files for the ViSTA MBAH project
+# ----------------------------------------------------
+
+# Ignore results files and originals scripts of the model
+Outputs/
+Original_ViSTA_Mayaud/
