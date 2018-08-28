@@ -135,7 +135,7 @@ print("Total sand height START =", sum(map(sum, initial_sand_heights_grid))); pr
 #*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*- PLOTTING *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 plot_wind_figures(windspeed_dataset, total_sand_vol, total_aval_vol, initial_sand_heights_grid, sand_heights_grid, windspeed_grid, w_soil_moisture_grid)
 plot_veg_figures(initial_veg_grid, veg_grid, initial_apparent_veg_type_grid, apparent_veg_type_grid, porosity_grid, age_grid, walls_grid, interaction_field, total_veg_pop, average_age_table, veg_proportions, rainfall_series, exposed_wall_proportions)
-plt.show
+plt.show()
 
 #*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* DATA STORAGE *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 #np.savetxt('Frames_sand_height', saving_grid_sand, delimiter=',')
@@ -144,9 +144,9 @@ plt.show
 #np.savetxt('Frames_veg_type', saving_grid_apparent_veg_type, delimiter=',')
 #np.savetxt('Frames_moisture', saving_grid_moisture, delimiter=',')
 #np.savetxt('Final_neighbourhood_stress', interaction_field, delimiter=',')
-np.savetxt('Final_veg_grid.txt', veg_grid, delimiter=',')
-np.savetxt('Final_age_grid.txt', age_grid, delimiter=',')
-np.savetxt('Final_veg_type_grid.txt', apparent_veg_type_grid, delimiter=',')
+np.savetxt('Final_veg_grid', veg_grid, delimiter=',')
+np.savetxt('Final_age_grid', age_grid, delimiter=',')
+np.savetxt('Final_veg_type_grid', apparent_veg_type_grid, delimiter=',')
 #np.savetxt('Final_wind_grid', windspeed_grid, delimiter=',')
 #np.savetxt('Final_sand_grid', sand_heights_grid, delimiter=',')
 #np.savetxt('Wind_frames', saving_grid_wind, delimiter=',')
