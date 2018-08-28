@@ -9,12 +9,12 @@ def plot_wind_figures (windspeed_dataset, total_sand_vol, total_aval_vol, initia
 
     #Plot eroded volume
     plt.figure(1); plt.subplot(1,2,1); plt.plot(total_sand_vol)
-    plt.hold(True); plt.plot([0, 0],[0, 1.05],color="white"); plt.hold(False)
+    plt.plot([0, 0],[0, 1.05],color="white")
     plt.xlabel("Wind iterations"); plt.ylabel("Volume (m^3)"); plt.title("Erosion volume")
     
     #Plot avalanching volume
     plt.subplot(1,2,2); plt.plot(total_aval_vol)
-    plt.hold(True); plt.plot([0, 0],[0, 1.05],color="white"); plt.hold(False)
+    plt.plot([0, 0],[0, 1.05],color="white")
     plt.xlabel("Wind iterations"); plt.ylabel("Volume (m^3)"); plt.title("Avalanching volume")
     
     #Plot sand heights, initial and final
@@ -88,7 +88,7 @@ def plot_veg_figures (initial_veg_grid, veg_grid, initial_apparent_veg_type_grid
     
     #Plot wall exposures
     plt.figure(); plt.plot(exposed_wall_proportions)
-    plt.hold(True); plt.plot([0, 0],[0, 1.05],color="white"); plt.hold(False)
+    plt.plot([0, 0],[0, 1.05],color="white")
     plt.xlabel("Model iterations"); plt.ylabel("% of exposed walls"); plt.title("Exposed walls")
-    
+  
 #*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
