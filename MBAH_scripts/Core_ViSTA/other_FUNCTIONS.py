@@ -168,8 +168,8 @@ def startgrids():
                 veg_grid[R, C] = 0. #No veg height
     
     #Remove plants from walls, as they can grow in the same place as a wall!
-    age_grid[np.where(walls_grid > 0)] = 0;
-    veg_grid[np.where(walls_grid > 0)] = 0;
+    age_grid[np.where(walls_grid > 0)] = 0
+    veg_grid[np.where(walls_grid > 0)] = 0
     
     return (sand_heights_grid, veg_grid, veg_type_grid, age_grid, cum_growth_grid, actual_biomass_grid, veg_occupation_grid, drought_grid, grid, walls_grid, walls_presence_grid)
 #*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
@@ -234,11 +234,11 @@ def startgrids_manual():
 
     #---------------------------------- Start ---------------------------------
     #Define main grids manually    
-    sand_heights_grid = np.ones((Nr, Nc))*1; #sand_heights_grid[20:40, 20:40] = 0.4    
+    sand_heights_grid = np.ones((Nr, Nc))*1 #sand_heights_grid[20:40, 20:40] = 0.4    
     walls_grid = np.zeros((Nr, Nc)); walls_grid[10:15, 10:15] = 2.2; walls_grid[20:25, 20:25] = 4 #Grid of where solid walls are located        
-    veg_grid = np.ones((Nr, Nc))*1; veg_grid[np.where(walls_grid > 0)] = 0; #veg_grid[10:40, 10:40] = 4
-    age_grid = np.ones((Nr, Nc))*300; age_grid[np.where(walls_grid > 0)] = 0; #age_grid[10:40, 10:40] = 300
-    veg_type_grid = np.ones((Nr, Nc)); #veg_type_grid[10:40, 10:40] = 2 #Beware - can't have any zeros in veg_type_grid (a veg type has to be ascribed)  
+    veg_grid = np.ones((Nr, Nc))*1; veg_grid[np.where(walls_grid > 0)] = 0 #veg_grid[10:40, 10:40] = 4
+    age_grid = np.ones((Nr, Nc))*300; age_grid[np.where(walls_grid > 0)] = 0 #age_grid[10:40, 10:40] = 300
+    veg_type_grid = np.ones((Nr, Nc)) #veg_type_grid[10:40, 10:40] = 2 #Beware - can't have any zeros in veg_type_grid (a veg type has to be ascribed)  
     
     #Define main grids from previous files
     #sand_heights_grid = np.loadtxt('Final_sand_grid_barchans1', delimiter=',')
