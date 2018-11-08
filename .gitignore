@@ -5,3 +5,8 @@
 # Ignore results files and originals scripts of the model
 data/
 Original_ViSTA_Mayaud/
+
+# Ignore figures and analysis documents
+ViSTA_Model_Scripts_analysis.docx
+component_status.xlsx
+setup_record.xlsx
