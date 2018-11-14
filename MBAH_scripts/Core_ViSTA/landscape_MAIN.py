@@ -133,6 +133,9 @@ elapsed = time.time() - start_time
 print("Total sand height START =", sum(map(sum, initial_sand_heights_grid))); print("Total sand height END =", sum(map(sum, sand_heights_grid))); print("Time elapsed =", elapsed, "seconds")
 
 #*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*- PLOTTING *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+manager = plt.get_current_fig_manager() # Fetch figures manager
+manager.window.showMaximized() # Display maximized figures
+
 plot_wind_figures(windspeed_dataset, total_sand_vol, total_aval_vol, initial_sand_heights_grid, sand_heights_grid, windspeed_grid, w_soil_moisture_grid)
 plot_veg_figures(initial_veg_grid, veg_grid, initial_apparent_veg_type_grid, apparent_veg_type_grid, porosity_grid, age_grid, walls_grid, interaction_field, total_veg_pop, average_age_table, veg_proportions, rainfall_series, exposed_wall_proportions)
 plt.show()
