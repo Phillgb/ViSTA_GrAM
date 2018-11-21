@@ -14,17 +14,17 @@ import math
 #*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
 #Grid
-Nr = 50 #Number of rows in grid (i.e. y axis)
-Nc = 50 #Number of columns in grid (i.e. x axis)
+Nr = 10 #Number of rows in grid (i.e. y axis)
+Nc = 10 #Number of columns in grid (i.e. x axis)
 cell_width = 1.0 #Width of a cell (m)a
 manual_initialisation = 'off' #'on' or 'off' - On means the veg and sand grids are manually specified in the 'startgrids_manual' function; off means grids are specified in the 'startgrids' functions
 boundary_conditions = 'periodic' #'periodic' or 'open' - Periodic means sand that is lost from the edges is fed back in a Torus formation; 'open' means sand that falls off the edge of the grid is lost forever
-start_grid_sand_mode = 'random' #'uniform', 'random' or 'circle' - Random means sand depth is random up to the depth defined by 'start_grid_sand'; 'uniform' means sand depth is uniform over the depth defined by 'start_grid_sand'; 'circle' means the entire landscape is bare apart from a central circle of radius 'sand_circle_radius' and height 'sand_circle_height'
+start_grid_sand_mode = 'uniform' #'uniform', 'random' or 'circle' - Random means sand depth is random up to the depth defined by 'start_grid_sand'; 'uniform' means sand depth is uniform over the depth defined by 'start_grid_sand'; 'circle' means the entire landscape is bare apart from a central circle of radius 'sand_circle_radius' and height 'sand_circle_height'
 start_grid_wall_mode = 'none' #'none', 'circle', 'square' or 'manual' - None means there are no walls; 'circle' means a central circular filled wall of radius 'wall_circle_or_square_radius_or_length' and height 'wall_circle_or_square_height'; 'square' means a central square filled wall of radius 'wall_circle_or_square_radius_or_length' and height 'wall_circle_or_square_height'; 'manual' means manually entered in the startgrids() routine
 start_grid_age_mode = 'random' #'uniform' or 'random' - Random means age is random up to 'start_grid_age'; 'uniform' means age is uniform over 'start_grid_age'
 start_grid_trunks_mode = 'uniform' #'uniform' or 'random' - Random means trunk proportion is random between 'min_trunk_proportion' and 'max_trunk_proportion'; 'uniform' means trunk proportion is uniform over 'start_grid_trunks'
 start_grid_porosity_mode = 'uniform' #'uniform' or 'random' - Random means plant porosities are random between 'min_random_porosity' and 'max_random_porosity'; 'uniform' means plant porosity is uniform over 'start_grid_porosity'
-start_grid_sand_upper = 0.2 #Highest depth of sediment when depths are randomly or uniformly assigned at start (m)
+start_grid_sand_upper = 1.0 #Highest depth of sediment when depths are randomly or uniformly assigned at start (m)
 start_grid_sand_lower = 10.0 #Lowest depth of sediment when depths are randomly assigned at start (m)
 start_grid_age = 360 #Age of plants when ages are randomly or uniformly assigned at start (months)
 start_grid_trunks = 0.7 #Proportion of tree height taken up by trunk, for equal proportion of total tree height that trunks take up (e.g. 0.5 = 50% of total tree height is trunk; 1.0 = 100% of total height is trunk)
@@ -39,7 +39,7 @@ shrub_proportion = 0.55 #Proportion of the veg distribution that is shrub (must 
 tree_proportion = 0.05 #Proportion of the veg distribution that is tree (must sum to 1 with grass and shrub)
 
 #Time
-model_iterations = 100 #Total number of iterations model is running
+model_iterations = 10 #Total number of iterations model is running
 wind_event_frequency = 1 #Frequency at which wind event occurs (i.e. 5 = one wind event every 5 model iterations)
 wind_resolution = 60  #Equivalent time for which wind is blowing during each wind event (MINUTES)
 veg_update_frequency = 100000 #Frequency at which veg is updated using the veg patterning module (i.e. 10 = one update every 10 model iterations)
