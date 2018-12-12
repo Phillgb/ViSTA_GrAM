@@ -14,12 +14,12 @@ import math
 #*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
 #Grid
-Nr = 10 #Number of rows in grid (i.e. y axis)
-Nc = 10 #Number of columns in grid (i.e. x axis)
+Nr = 100 #Number of rows in grid (i.e. y axis)
+Nc = 100 #Number of columns in grid (i.e. x axis)
 cell_width = 1.0 #Width of a cell (m)a
 manual_initialisation = 'off' #'on' or 'off' - On means the veg and sand grids are manually specified in the 'startgrids_manual' function; off means grids are specified in the 'startgrids' functions
 boundary_conditions = 'periodic' #'periodic' or 'open' - Periodic means sand that is lost from the edges is fed back in a Torus formation; 'open' means sand that falls off the edge of the grid is lost forever
-start_grid_sand_mode = 'uniform' #'uniform', 'random' or 'circle' - Random means sand depth is random up to the depth defined by 'start_grid_sand'; 'uniform' means sand depth is uniform over the depth defined by 'start_grid_sand'; 'circle' means the entire landscape is bare apart from a central circle of radius 'sand_circle_radius' and height 'sand_circle_height'
+start_grid_sand_mode = 'random' #'uniform', 'random' or 'circle' - Random means sand depth is random up to the depth defined by 'start_grid_sand'; 'uniform' means sand depth is uniform over the depth defined by 'start_grid_sand'; 'circle' means the entire landscape is bare apart from a central circle of radius 'sand_circle_radius' and height 'sand_circle_height'
 start_grid_wall_mode = 'none' #'none', 'circle', 'square' or 'manual' - None means there are no walls; 'circle' means a central circular filled wall of radius 'wall_circle_or_square_radius_or_length' and height 'wall_circle_or_square_height'; 'square' means a central square filled wall of radius 'wall_circle_or_square_radius_or_length' and height 'wall_circle_or_square_height'; 'manual' means manually entered in the startgrids() routine
 start_grid_age_mode = 'random' #'uniform' or 'random' - Random means age is random up to 'start_grid_age'; 'uniform' means age is uniform over 'start_grid_age'
 start_grid_trunks_mode = 'uniform' #'uniform' or 'random' - Random means trunk proportion is random between 'min_trunk_proportion' and 'max_trunk_proportion'; 'uniform' means trunk proportion is uniform over 'start_grid_trunks'
@@ -28,33 +28,33 @@ start_grid_sand_upper = 1.0 #Highest depth of sediment when depths are randomly 
 start_grid_sand_lower = 10.0 #Lowest depth of sediment when depths are randomly assigned at start (m)
 start_grid_age = 360 #Age of plants when ages are randomly or uniformly assigned at start (months)
 start_grid_trunks = 0.7 #Proportion of tree height taken up by trunk, for equal proportion of total tree height that trunks take up (e.g. 0.5 = 50% of total tree height is trunk; 1.0 = 100% of total height is trunk)
-start_grid_porosity = 40 #Plant porosities, for equal porosity for all plants (%)
+start_grid_porosity = 30 #Plant porosities, for equal porosity for all plants (%)
 sand_circle_radius = 20 #Radius of sand circle at the centre (if activated in 'start_grid_sand_mode') (m)
 sand_circle_height = 10 #Height of sand circle at the centre (if activated in 'start_grid_sand_mode') (m)
 wall_circle_or_square_radius_or_length = 5 #Radius of wall circle or half-length of square at the centre (if activated in 'start_grid_wall_mode') (m)
 wall_circle_or_square_height = 3. #Height of wall circle or square at the centre (if activated in 'start_grid_wall_mode') (m)
-veg_distrib = 0 # % of surface covered in vegetation, min = 0, max = 1.0 (i.e. 0.9 means 90% of cells have veg)
-grass_proportion = 0.4 #Proportion of the veg distribution that is grass (must sum to 1 with shrub and tree)
-shrub_proportion = 0.55 #Proportion of the veg distribution that is shrub (must sum to 1 with grass and tree)
-tree_proportion = 0.05 #Proportion of the veg distribution that is tree (must sum to 1 with grass and shrub)
+veg_distrib = 0.3 # % of surface covered in vegetation, min = 0, max = 1.0 (i.e. 0.9 means 90% of cells have veg)
+grass_proportion = 1.00 #Proportion of the veg distribution that is grass (must sum to 1 with shrub and tree)
+shrub_proportion = 0.00 #Proportion of the veg distribution that is shrub (must sum to 1 with grass and tree)
+tree_proportion = 0.00 #Proportion of the veg distribution that is tree (must sum to 1 with grass and shrub)
 
 #Time
-model_iterations = 10 #Total number of iterations model is running
+model_iterations = 1000 #Total number of iterations model is running
 wind_event_frequency = 1 #Frequency at which wind event occurs (i.e. 5 = one wind event every 5 model iterations)
-wind_resolution = 60  #Equivalent time for which wind is blowing during each wind event (MINUTES)
-veg_update_frequency = 100000 #Frequency at which veg is updated using the veg patterning module (i.e. 10 = one update every 10 model iterations)
+wind_resolution = 300  #Equivalent time for which wind is blowing during each wind event (MINUTES)
+veg_update_frequency = 6 #Frequency at which veg is updated using the veg patterning module (i.e. 10 = one update every 10 model iterations)
 veg_update_freq_equivalent = 3 #What the frequency of veg update represents in real MONTHS; must be divisible by 12 (1 = monthly (i.e. 12 updates a year), 6 = every 6 months (i.e. 2 updates a year), etc.)
-moisture_update_frequency = 100000 #Frequency at which moisture is updated in feedback (i.e. 5 = one moisture update every 5 model iterations)
-moisture_update_frequency_equivalent = 100000 #Only relevant for soil moisture feedback routine - it's what the moisture update frequency represents in real HOURS; technically should be compatible with veg update frequency and wind resolution
+moisture_update_frequency = 1 #Frequency at which moisture is updated in feedback (i.e. 5 = one moisture update every 5 model iterations)
+moisture_update_frequency_equivalent = 5 #Only relevant for soil moisture feedback routine - it's what the moisture update frequency represents in real HOURS; technically should be compatible with veg update frequency and wind resolution
 
 #Wind
 wind_event_timeseries = 'constant' #Type of wind pattern imposed: can be 'constant', 'trend', 'v-shaped', 'weibull'
 windspeed_variability = 'off' #'on' adds variability to the unobstructed windspeed at the start of each iteration (according to windspeed_var_normal_stdev) - currently only normal distribution(give a Weibull option too??);'off' removes this
 windspeed_stochasticity = 'off' #'on' adds stochasticity to windspeed in each cell (according to the norm_dist_multiplier); 'off' removes this
-wind_event_constant = 7.0 #For 'constant' (m/s) <--- Unobstructed windspeed entering grid for that timestep
+wind_event_constant = 7.5 #For 'constant' (m/s) <--- Unobstructed windspeed entering grid for that timestep
 wind_event_start = 2; wind_event_end = 10 #For 'trend', 'v-shaped' (m/s) <--- Unobstructed windspeed entering grid for that timestep
-windspeed_threshold = 5.1 #Windspeed threshold over which sand transport occurs (m/s)
-wind_angle_array = [212] #Angle of wind entering grid for that time step (degrees) (Array is repeated the number of wind iterations)
+windspeed_threshold = 5.0 #Windspeed threshold over which sand transport occurs (m/s)
+wind_angle_array = [190] #Angle of wind entering grid for that time step (degrees) (Array is repeated the number of wind iterations)
 weibull_shape_parameter = 1.6 #Shape parameter for Weibull distribution if 'wind_event_timeseries' is set to 'weibull'
 weibull_scale_parameter = 3.4 #Scale parameter for Weibull distribution if 'wind_event_timeseries' is set to 'weibull'
 
