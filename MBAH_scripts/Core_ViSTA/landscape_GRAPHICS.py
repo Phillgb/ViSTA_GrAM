@@ -94,7 +94,9 @@ def plot_veg_figures (initial_veg_grid, veg_grid, initial_apparent_veg_type_grid
     
     #Plot average age
     fig, ax4 = plt.subplots()
-    ax4.plot(time, average_age_table[:, 0], color='#a6cee3', time, average_age_table[:, 1], color='#1f78b4', time, average_age_table[:, 2], color='#b2df8a')
+    ax4.plot(time, average_age_table[:, 0], color='#a6cee3')
+    ax4.plot(time, average_age_table[:, 1], color='#1f78b4')
+    ax4.plot(time, average_age_table[:, 2], color='#b2df8a')
     ax4.set_xlabel('Time')
     ax4.set_ylabel('Average plant age', color='k')
     plt.legend(['Grass', 'Shrub', 'Tree'])
@@ -105,7 +107,9 @@ def plot_veg_figures (initial_veg_grid, veg_grid, initial_apparent_veg_type_grid
     
     #Plot veg type proportions
     fig, ax5 = plt.subplots()
-    ax5.plot(time, veg_proportions[:, 0], color='#a6cee3', time, veg_proportions[:, 1], color='#1f78b4', veg_proportions[:, 2], color='#b2df8a')
+    ax5.plot(time, veg_proportions[:, 0], color='#a6cee3')
+    ax5.plot(time, veg_proportions[:, 1], color='#1f78b4')
+    ax5.plot(time, veg_proportions[:, 2], color='#b2df8a')
     ax5.set_xlabel('Time')
     ax5.set_ylabel('Proportion of total veg cover', color='k')
     plt.legend(['Grass', 'Shrub', 'Tree'])
