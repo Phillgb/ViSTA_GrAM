@@ -85,7 +85,7 @@ def plot_veg_figures (initial_veg_grid, veg_grid, initial_apparent_veg_type_grid
     
     #Plot alpha vs population
     fig, ax3 = plt.subplots()
-    ax3.plot(rainfall_series, (total_veg_pop/(Nr*Nc)), 'b-'); ax3.invert_xaxis()
+    ax3.plot(rainfall_series, (total_veg_pop/(Nr*Nc)), 'bo'); ax3.invert_xaxis()
     ax3.set_xlabel("Precipitation (annual equivalent, mm)"); ax3.set_ylabel("Population density")
     ax3.set_ylim([0, 1])  
     plt.title("Population density vs precipitation")
