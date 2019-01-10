@@ -1,4 +1,11 @@
 from landscape_SETUP import *
+from matplotlib import colors
+
+#*-*-*-*-*-*-*-*-*-*-*-*-*-*-*- SETUP *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+#Creating a minimized "Paired" colormap for vegetation figures 
+veg_cmap = colors.ListedColormap(['white', '#a6cee3', '#1f78b4', '#b2df8a'])
+veg_bounds = [-0.5, 0.5, 1.5, 2.5, 3.5]
+veg_ticks = [0, 1, 2, 3]
 
 #*-*-*-*-*-*-*-*-*-*-*-*-*-*-*- MAIN *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
@@ -32,7 +39,7 @@ def plot_wind_figures (windspeed_dataset, total_sand_vol, total_aval_vol, initia
     
     #Plot final windspeed and moisture
     plt.figure(3); plt.subplot(1,2,1)  
-    plt.imshow(windspeed_grid, cmap='GnBu', interpolation='none'); plt.title("Final windspeed grid"); plt.colorbar()
+    plt.imshow(windspeed_grid, cmap='Greys', interpolation='none'); plt.title("Final windspeed grid"); plt.colorbar()
     plt.subplot(1,2,2)
     plt.imshow(w_soil_moisture_grid, cmap='Blues', interpolation='none'); plt.clim(0, 1.0); plt.title("Final moisture grid"); plt.colorbar()
     plt.tight_layout()
@@ -58,14 +65,14 @@ def plot_veg_figures (initial_veg_grid, veg_grid, initial_apparent_veg_type_grid
 
     #Plot vegetation type
     plt.figure(6); plt.subplot(1,2,1)
-    plt.imshow(initial_apparent_veg_type_grid, cmap='Paired', interpolation='none'); plt.clim(0, 3.); plt.title("Initial veg types"); plt.colorbar()
+    plt.imshow(initial_apparent_veg_type_grid, cmap=veg_cmap, interpolation='none'); plt.clim(0, 3); plt.title("Initial veg types"); plt.colorbar(cmap=veg_cmap, boundaries=veg_bounds, ticks=veg_ticks)
     plt.subplot(1,2,2)
-    plt.imshow(apparent_veg_type_grid, cmap='Paired', interpolation='none'); plt.clim(0, 3.); plt.title("Final veg types"); plt.colorbar()
+    plt.imshow(apparent_veg_type_grid, cmap=veg_cmap, interpolation='none'); plt.clim(0, 3); plt.title("Final veg types"); plt.colorbar(cmap=veg_cmap, boundaries=veg_bounds, ticks=veg_ticks)
     plt.tight_layout()
     plt.savefig('./VegType_fig.png', dpi=300)
 
     #Plot walls grid
-    plt.figure(7); plt.imshow(walls_grid, cmap='BuPu', interpolation='none'); plt.colorbar(); plt.title('Solid walls')
+    plt.figure(7); plt.imshow(walls_grid, cmap='RdBu', interpolation='none'); plt.colorbar(); plt.title('Solid walls')
     plt.tight_layout()
     plt.savefig('./Walls_fig.png', dpi=300)
     
@@ -75,7 +82,7 @@ def plot_veg_figures (initial_veg_grid, veg_grid, initial_apparent_veg_type_grid
     time = np.arange(0, veg_iterations)
     ax1.plot(time, (total_veg_pop/(Nr*Nc)), 'g-')
     ax2.plot(time, rainfall_series, 'b-')
-    ax1.set_xlabel('Time')
+    ax1.set_xlabel('Vegetation iterations')
     ax1.set_ylabel('Population density', color='g')
     ax2.set_ylabel('Precipitation (annual equivalent, mm)', color='b')
     ax1.set_ylim([0, 1])   
@@ -97,7 +104,7 @@ def plot_veg_figures (initial_veg_grid, veg_grid, initial_apparent_veg_type_grid
     ax4.plot(time, average_age_table[:, 0], color='#a6cee3')
     ax4.plot(time, average_age_table[:, 1], color='#1f78b4')
     ax4.plot(time, average_age_table[:, 2], color='#b2df8a')
-    ax4.set_xlabel('Time')
+    ax4.set_xlabel('Vegetation iterations')
     ax4.set_ylabel('Average plant age', color='k')
     plt.legend(['Grass', 'Shrub', 'Tree'])
     ax4.set_ylim([0, 1000]) 
@@ -110,7 +117,7 @@ def plot_veg_figures (initial_veg_grid, veg_grid, initial_apparent_veg_type_grid
     ax5.plot(time, veg_proportions[:, 0], color='#a6cee3')
     ax5.plot(time, veg_proportions[:, 1], color='#1f78b4')
     ax5.plot(time, veg_proportions[:, 2], color='#b2df8a')
-    ax5.set_xlabel('Time')
+    ax5.set_xlabel('Vegetation iterations')
     ax5.set_ylabel('Proportion of total veg cover', color='k')
     plt.legend(['Grass', 'Shrub', 'Tree'])
     ax5.set_ylim([0, 1.2])
