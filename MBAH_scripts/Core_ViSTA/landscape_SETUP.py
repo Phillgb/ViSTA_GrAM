@@ -14,9 +14,9 @@ import math
 #*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
 #Grid
-Nr = 100 #Number of rows in grid (i.e. y axis)
-Nc = 100 #Number of columns in grid (i.e. x axis)
-cell_width = 1.0 #Width of a cell (m)a
+Nr = 50 #Number of rows in grid (i.e. y axis)
+Nc = 50 #Number of columns in grid (i.e. x axis)
+cell_width = 2 #Width of a cell (m)a
 manual_initialisation = 'off' #'on' or 'off' - On means the veg and sand grids are manually specified in the 'startgrids_manual' function; off means grids are specified in the 'startgrids' functions
 boundary_conditions = 'periodic' #'periodic' or 'open' - Periodic means sand that is lost from the edges is fed back in a Torus formation; 'open' means sand that falls off the edge of the grid is lost forever
 start_grid_sand_mode = 'random' #'uniform', 'random' or 'circle' - Random means sand depth is random up to the depth defined by 'start_grid_sand'; 'uniform' means sand depth is uniform over the depth defined by 'start_grid_sand'; 'circle' means the entire landscape is bare apart from a central circle of radius 'sand_circle_radius' and height 'sand_circle_height'
@@ -39,7 +39,7 @@ shrub_proportion = 0.00 #Proportion of the veg distribution that is shrub (must 
 tree_proportion = 0.00 #Proportion of the veg distribution that is tree (must sum to 1 with grass and shrub)
 
 #Time
-model_iterations = 1000 #Total number of iterations model is running
+model_iterations = 600 #Total number of iterations model is running
 wind_event_frequency = 1 #Frequency at which wind event occurs (i.e. 5 = one wind event every 5 model iterations)
 wind_resolution = 300  #Equivalent time for which wind is blowing during each wind event (MINUTES)
 veg_update_frequency = 6 #Frequency at which veg is updated using the veg patterning module (i.e. 10 = one update every 10 model iterations)
