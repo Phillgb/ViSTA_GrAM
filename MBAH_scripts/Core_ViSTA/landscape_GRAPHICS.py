@@ -14,6 +14,7 @@ def plot_wind_figures (windspeed_dataset, total_sand_vol, total_aval_vol, initia
     #Plot windspeed
     plt.figure(0); plt.plot(windspeed_dataset, 'k-')
     plt.xlabel("Wind iterations"); plt.ylabel("Wind velocity (m/s)"); plt.title("Wind velocity")
+    plt.grid(b=True, which="both", axis='both')
     plt.tight_layout()
     plt.savefig('./windspeed_Timeserie.png', dpi=300)
 
@@ -21,11 +22,13 @@ def plot_wind_figures (windspeed_dataset, total_sand_vol, total_aval_vol, initia
     plt.figure(1); plt.subplot(1,2,1); plt.plot(total_sand_vol, 'r-')
     plt.plot([0, 0],[0, 1.05],color="white")
     plt.xlabel("Wind iterations"); plt.ylabel("Volume (m^3)"); plt.title("Erosion volume")
+    plt.grid(b=True, which='both', axis='both')
     
     #Plot avalanching volume
     plt.subplot(1,2,2); plt.plot(total_aval_vol, 'r-')
     plt.plot([0, 0],[0, 1.05],color="white")
     plt.xlabel("Wind iterations"); plt.ylabel("Volume (m^3)"); plt.title("Avalanching volume")
+    plt.grid(b=True, which='both', axis='both')
     plt.tight_layout()
     plt.savefig('./ErodAvalVol_fig.png', dpi=300)
     
@@ -87,6 +90,8 @@ def plot_veg_figures (initial_veg_grid, veg_grid, initial_apparent_veg_type_grid
     ax2.set_ylabel('Precipitation (annual equivalent, mm)', color='b')
     ax1.set_ylim([0, 1])   
     plt.title("Population density and precipitation")
+    ax1.grid(b=True, which='both', axis='both', color='g')
+    ax2.grid(b=True, which='both', axis='both', color='b')
     plt.tight_layout()
     plt.savefig('./Popdens_Timeserie.png', dpi=300)
     
@@ -96,6 +101,7 @@ def plot_veg_figures (initial_veg_grid, veg_grid, initial_apparent_veg_type_grid
     ax3.set_xlabel("Precipitation (annual equivalent, mm)"); ax3.set_ylabel("Population density")
     ax3.set_ylim([0, 1])  
     plt.title("Population density vs precipitation")
+    ax3.grid(b=True, which='both', axis='both')
     plt.tight_layout()
     plt.savefig('./PopDensPrecip_fig.png', dpi=300)
     
@@ -107,7 +113,8 @@ def plot_veg_figures (initial_veg_grid, veg_grid, initial_apparent_veg_type_grid
     ax4.set_xlabel('Vegetation iterations')
     ax4.set_ylabel('Average plant age', color='k')
     plt.legend(['Grass', 'Shrub', 'Tree'])
-    ax4.set_ylim([0, 1000]) 
+    ax4.set_ylim([0, 1000])
+    ax4.grid(b=True, which='both', axis='both')
     plt.title("Average age")
     plt.tight_layout()
     plt.savefig('./VegAge_Timeserie.png', dpi=300)
@@ -122,6 +129,7 @@ def plot_veg_figures (initial_veg_grid, veg_grid, initial_apparent_veg_type_grid
     plt.legend(['Grass', 'Shrub', 'Tree'])
     ax5.set_ylim([0, 1.2])
     plt.title("Plant proportions")
+    ax5.grid(b=True, which='both', axis='both')
     plt.tight_layout()
     plt.savefig('./VegProport_TimeSerie.png', dpi=300)
     
@@ -129,6 +137,7 @@ def plot_veg_figures (initial_veg_grid, veg_grid, initial_apparent_veg_type_grid
     plt.figure(); plt.plot(exposed_wall_proportions)
     plt.plot([0, 0],[0, 1.05],color="white")
     plt.xlabel("Model iterations"); plt.ylabel("% of exposed walls"); plt.title("Exposed walls")
+    plt.grid(b=True, which='both', axis='both')
     plt.tight_layout()
     plt.savefig('./WallExpo_fig.png', dpi=300)
 

@@ -130,7 +130,7 @@ for t in range(model_iterations):
          
 #*-*-*-*-*-*-*-*-*-*-*-*-*-*-*- WIND STOPS BLOWING *-*-*-*-*-*-*-*-*-*-*-*-*-*-
 elapsed = time.time() - start_time
-print("Total sand height START =", sum(map(sum, initial_sand_heights_grid))); print("Total sand height END =", sum(map(sum, sand_heights_grid))); print("Time elapsed =", elapsed, "seconds")
+print("Total sand height START =", sum(map(sum, initial_sand_heights_grid))); print("Total sand height END =", sum(map(sum, sand_heights_grid))); print("Time elapsed =", elapsed, "seconds"); print("Total sand volume displaced across simulation = ", sum(total_sand_vol), "m^3")
 
 #*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*- PLOTTING *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
