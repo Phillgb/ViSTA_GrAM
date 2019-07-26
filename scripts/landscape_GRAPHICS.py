@@ -12,20 +12,20 @@ veg_ticks = [0, 1, 2, 3]
 def plot_wind_figures (windspeed_dataset, total_sand_vol, total_aval_vol, initial_sand_heights_grid, sand_heights_grid, windspeed_grid, w_soil_moisture_grid):
 
     #Plot windspeed
-    plt.figure(0); plt.plot(windspeed_dataset, 'k-')
+    plt.figure(0); plt.plot(windspeed_dataset)
     plt.xlabel("Wind iterations"); plt.ylabel("Wind velocity (m/s)"); plt.title("Wind velocity")
     plt.grid(b=True, which="both", axis='both')
     plt.tight_layout()
     plt.savefig('./windspeed_Timeserie.png', dpi=300)
 
     #Plot eroded volume
-    plt.figure(1); plt.subplot(1,2,1); plt.plot(total_sand_vol, 'r-')
+    plt.figure(1); plt.subplot(1,2,1); plt.plot(total_sand_vol, color='C1')
     plt.plot([0, 0],[0, 1.05],color="white")
     plt.xlabel("Wind iterations"); plt.ylabel("Volume (m^3)"); plt.title("Erosion volume")
     plt.grid(b=True, which='both', axis='both')
     
     #Plot avalanching volume
-    plt.subplot(1,2,2); plt.plot(total_aval_vol, 'r-')
+    plt.subplot(1,2,2); plt.plot(total_aval_vol, color='C1')
     plt.plot([0, 0],[0, 1.05],color="white")
     plt.xlabel("Wind iterations"); plt.ylabel("Volume (m^3)"); plt.title("Avalanching volume")
     plt.grid(b=True, which='both', axis='both')
@@ -83,15 +83,16 @@ def plot_veg_figures (initial_veg_grid, veg_grid, initial_apparent_veg_type_grid
     fig, ax1 = plt.subplots()
     ax2 = ax1.twinx()
     time = np.arange(0, veg_iterations)
-    ax1.plot(time, (total_veg_pop/(Nr*Nc)), 'g-')
-    ax2.plot(time, rainfall_series, 'b-')
+    ax1.plot(time, (total_veg_pop/(Nr*Nc)), color='k')
+    ax2.plot(time, rainfall_series, color='#808080')
     ax1.set_xlabel('Vegetation iterations')
-    ax1.set_ylabel('Population density', color='g')
-    ax2.set_ylabel('Precipitation (annual equivalent, mm)', color='b')
+    ax1.set_ylabel('Population density')
+    ax2.set_ylabel('Precipitation (annual equivalent, mm)')
     ax1.set_ylim([0, 1])   
     plt.title("Population density and precipitation")
-    ax1.grid(b=True, which='both', axis='both', color='g')
-    ax2.grid(b=True, which='both', axis='both', color='b')
+    ax1.grid(b=True, which='both', axis='both')
+    ax2.grid(b=True, which='both', axis='both', color='#c0c0c0', linestyle='--')
+    plt.legend()
     plt.tight_layout()
     plt.savefig('./Popdens_Timeserie.png', dpi=300)
     
@@ -140,8 +141,24 @@ def plot_veg_figures (initial_veg_grid, veg_grid, initial_apparent_veg_type_grid
     plt.grid(b=True, which='both', axis='both')
     plt.tight_layout()
     plt.savefig('./WallExpo_fig.png', dpi=300)
-
+   
     #Close all open figures
     plt.close('all')
-  
+
+def plot_grazing_figure(grazing_heat_map, mean_travel_array):
+    # Plot the map of grazer passage on the grid cell
+    plt.figure(); plt.imshow(grazing_heat_map, cmap="OrRd", interpolation=None)
+    plt.colorbar()
+    plt.title("Grazer passage intensity (number of passage)")
+    plt.tight_layout()
+    plt.savefig('./grazer_heat_map.png', dpi=300)
+
+    # Plot timeserie of mean distance traveled per each grazing event
+    plt.figure(); plt.plot(mean_travel_array)
+    plt.xlabel('Vegetation iterations'); plt.ylabel('Mean distance traveled (m)')
+    plt.title('Mean distance traveled each time a grazing agent move')
+    plt.grid(b=True, which='both', axis='both')
+    plt.tight_layout()
+    plt.savefig('./dist_travel_timeserie.png', dpi=300)
+
 #*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-

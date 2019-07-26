@@ -51,8 +51,10 @@ def startarrays():
     avalanching_grid = np.zeros((Nrw, Ncw)) #Grid to form basis for avalanching grid calculations
     windspeed_grid = np.zeros((Nr, Nc)) #Grid to form basis for windspeed calculations
     interaction_field = np.zeros((Nr, Nc)) #Grid to form basis for neighbourhood interactions between plants
+    grazer_passage_grid = np.zeros((Nrw, Ncw)) # Grid to store the number of passage of each grazer on each cell (GrAM module).
+    mean_dist_travel = np.zeros(veg_iterations) # Mean distance traveled by grazer each time they move (GrAM module).
     
-    return (rainfall_days, total_sand_vol, total_aval_vol, total_veg_pop, average_age_table, veg_proportions, exposed_wall_proportions, differences_grid, avalanching_grid, windspeed_grid, interaction_field)
+    return (rainfall_days, total_sand_vol, total_aval_vol, total_veg_pop, average_age_table, veg_proportions, exposed_wall_proportions, differences_grid, avalanching_grid, windspeed_grid, interaction_field, grazer_passage_grid, mean_dist_travel)
 #*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
 #*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*- START GRIDS *-*-*-*-*-*-*-*-*-*-*-*-*-*-*

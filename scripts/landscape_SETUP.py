@@ -14,9 +14,9 @@ import math
 #*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
 #Grid
-Nr = 50 #Number of rows in grid (i.e. y axis)
-Nc = 50 #Number of columns in grid (i.e. x axis)
-cell_width = 2 #Width of a cell (m)a
+Nr = 20 #Number of rows in grid (i.e. y axis)
+Nc = 20 #Number of columns in grid (i.e. x axis)
+cell_width = 5 #Width of a cell (m)a
 manual_initialisation = 'off' #'on' or 'off' - On means the veg and sand grids are manually specified in the 'startgrids_manual' function; off means grids are specified in the 'startgrids' functions
 boundary_conditions = 'periodic' #'periodic' or 'open' - Periodic means sand that is lost from the edges is fed back in a Torus formation; 'open' means sand that falls off the edge of the grid is lost forever
 start_grid_sand_mode = 'random' #'uniform', 'random' or 'circle' - Random means sand depth is random up to the depth defined by 'start_grid_sand'; 'uniform' means sand depth is uniform over the depth defined by 'start_grid_sand'; 'circle' means the entire landscape is bare apart from a central circle of radius 'sand_circle_radius' and height 'sand_circle_height'
@@ -24,8 +24,8 @@ start_grid_wall_mode = 'none' #'none', 'circle', 'square' or 'manual' - None mea
 start_grid_age_mode = 'random' #'uniform' or 'random' - Random means age is random up to 'start_grid_age'; 'uniform' means age is uniform over 'start_grid_age'
 start_grid_trunks_mode = 'uniform' #'uniform' or 'random' - Random means trunk proportion is random between 'min_trunk_proportion' and 'max_trunk_proportion'; 'uniform' means trunk proportion is uniform over 'start_grid_trunks'
 start_grid_porosity_mode = 'uniform' #'uniform' or 'random' - Random means plant porosities are random between 'min_random_porosity' and 'max_random_porosity'; 'uniform' means plant porosity is uniform over 'start_grid_porosity'
-start_grid_sand_upper = 1.0 #Highest depth of sediment when depths are randomly or uniformly assigned at start (m)
-start_grid_sand_lower = 10.0 #Lowest depth of sediment when depths are randomly assigned at start (m)
+start_grid_sand_upper = 10.0 #Highest depth of sediment when depths are randomly or uniformly assigned at start (m)
+start_grid_sand_lower = 1.0 #Lowest depth of sediment when depths are randomly assigned at start (m)
 start_grid_age = 360 #Age of plants when ages are randomly or uniformly assigned at start (months)
 start_grid_trunks = 0.7 #Proportion of tree height taken up by trunk, for equal proportion of total tree height that trunks take up (e.g. 0.5 = 50% of total tree height is trunk; 1.0 = 100% of total height is trunk)
 start_grid_porosity = 30 #Plant porosities, for equal porosity for all plants (%)
@@ -33,13 +33,13 @@ sand_circle_radius = 20 #Radius of sand circle at the centre (if activated in 's
 sand_circle_height = 10 #Height of sand circle at the centre (if activated in 'start_grid_sand_mode') (m)
 wall_circle_or_square_radius_or_length = 5 #Radius of wall circle or half-length of square at the centre (if activated in 'start_grid_wall_mode') (m)
 wall_circle_or_square_height = 3. #Height of wall circle or square at the centre (if activated in 'start_grid_wall_mode') (m)
-veg_distrib = 0.3 # % of surface covered in vegetation, min = 0, max = 1.0 (i.e. 0.9 means 90% of cells have veg)
-grass_proportion = 1.00 #Proportion of the veg distribution that is grass (must sum to 1 with shrub and tree)
-shrub_proportion = 0.00 #Proportion of the veg distribution that is shrub (must sum to 1 with grass and tree)
-tree_proportion = 0.00 #Proportion of the veg distribution that is tree (must sum to 1 with grass and shrub)
+veg_distrib = 0.8 # % of surface covered in vegetation, min = 0, max = 1.0 (i.e. 0.9 means 90% of cells have veg)
+grass_proportion = 0.50 #Proportion of the veg distribution that is grass (must sum to 1 with shrub and tree)
+shrub_proportion = 0.25 #Proportion of the veg distribution that is shrub (must sum to 1 with grass and tree)
+tree_proportion = 0.25 #Proportion of the veg distribution that is tree (must sum to 1 with grass and shrub)
 
 #Time
-model_iterations = 600 #Total number of iterations model is running
+model_iterations = 48 #Total number of iterations model is running
 wind_event_frequency = 1 #Frequency at which wind event occurs (i.e. 5 = one wind event every 5 model iterations)
 wind_resolution = 300  #Equivalent time for which wind is blowing during each wind event (MINUTES)
 veg_update_frequency = 6 #Frequency at which veg is updated using the veg patterning module (i.e. 10 = one update every 10 model iterations)
@@ -63,10 +63,10 @@ rainfall_series_timeseries = 'constant' #Type of rainfall temporal pattern impos
 rainfall_series_spatial = 'homogeneous' #Type of rainfall spatal pattern imposed: 'homogeneous', 'vertical' or 'corner'
 rainfall_variability = 'off' #'on' adds variability to the rainfall at the start of each iteration; 'off' removes this
 rainfall_series_constant = 90 #For constant stress on time series (mm, annual equivalent)
-rainfall_series_constant_MAM = 57 #If rainfall_series_timeseries is 'seasonal'; March, April, May rainfall
-rainfall_series_constant_JJA = 11 #If rainfall_series_timeseries is 'seasonal'; June, July, August rainfall
-rainfall_series_constant_SON = 38 #If rainfall_series_timeseries is 'seasonal'; September, October, November rainfall
-rainfall_series_constant_DJF = 103 #If rainfall_series_timeseries is 'seasonal'; December, January, February rainfall
+rainfall_series_constant_MAM = 15 #If rainfall_series_timeseries is 'seasonal'; March, April, May rainfall
+rainfall_series_constant_JJA = 45 #If rainfall_series_timeseries is 'seasonal'; June, July, August rainfall
+rainfall_series_constant_SON = 15 #If rainfall_series_timeseries is 'seasonal'; September, October, November rainfall
+rainfall_series_constant_DJF = 10 #If rainfall_series_timeseries is 'seasonal'; December, January, February rainfall
 rainfall_series_start = 200; rainfall_series_end = 0 #For trend, v-shaped, asym (mm, annual equivalent)
 rainfall_series_switch = 5  #For asym
 P = 5 #Approx period of red noise (P>1)
@@ -86,11 +86,12 @@ veg_threshold = 0.08 #Height over which you're interested in plotting population
 
 #Grazing and fire
 fire_event_timeseries = 'none' #Type of fire regime imposed: 'none', 'single', 'periodic'
-grazing_event_timeseries = 'none' #Type of grazing regime imposed: 'none', 'constant', 'periodic'
+grazing_event_timeseries = 'GrAM' #Type of grazing regime imposed: 'none', 'constant', 'periodic', 'GrAM'
 fire_event_single = 24 #For 'single' fire regime - month at which a single fire event occurs
 fire_event_frequency = 12 #For 'periodic' fire regime - how often a fire happens - ideally, should be divisible by the veg_update_freq_equivalent (months)
-grazing_event_frequency = 24 #For 'periodic' grazing frequency - how often a grazing event occurs - ideally, should be divisible by the veg_update_freq_equivalent (months)
-stocking_rate = 0.005 #For grazing - number of livestock per hectare (typically up to ~0.06; above 0.06 counts as severely degraded)
+grazing_event_frequency = 12 #For 'periodic' or 'GrAM' grazing frequency - how often a grazing event occurs - ideally, should be divisible by the veg_update_freq_equivalent (months)
+stocking_rate = 0.05 #For grazing - number of livestock per hectare (typically up to ~0.06; above 0.06 counts as severely degraded)
+grazing_event_duration = 90 # For 'GrAM' grazing timeseries - Number of days the grazers are on the grid.
 
 #*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 #                             SEMI-FIXED PARAMETERS   

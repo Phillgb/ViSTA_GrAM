@@ -5,3 +5,4 @@ from wind_FUNCTIONS import avalanche, define_wind_series, depositiontrajectories
 from veg_FUNCTIONS import veg_update, define_rainfall_series, define_fire_grazing_series
 from landscape_GRAPHICS import *
 from landscape_SETUP import *
+from GrAM.GrAM_main import GrAM
