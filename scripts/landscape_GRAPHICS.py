@@ -1,5 +1,6 @@
 from landscape_SETUP import *
 from matplotlib import colors
+from matplotlib.ticker import MaxNLocator 
 
 #*-*-*-*-*-*-*-*-*-*-*-*-*-*-*- SETUP *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 #Creating a minimized "Paired" colormap for vegetation figures 
@@ -83,24 +84,26 @@ def plot_veg_figures (initial_veg_grid, veg_grid, initial_apparent_veg_type_grid
     fig, ax1 = plt.subplots()
     ax2 = ax1.twinx()
     time = np.arange(0, veg_iterations)
-    ax1.plot(time, (total_veg_pop/(Nr*Nc)), color='k')
-    ax2.plot(time, rainfall_series, color='#808080')
+    line1, = ax1.plot(time, (total_veg_pop/(Nr*Nc)), color='C2')
+    line2, = ax2.plot(time, rainfall_series, color='C0')
     ax1.set_xlabel('Vegetation iterations')
+    ax1.xaxis.set_major_locator(MaxNLocator(integer=True))
     ax1.set_ylabel('Population density')
     ax2.set_ylabel('Precipitation (annual equivalent, mm)')
     ax1.set_ylim([0, 1])   
     plt.title("Population density and precipitation")
     ax1.grid(b=True, which='both', axis='both')
     ax2.grid(b=True, which='both', axis='both', color='#c0c0c0', linestyle='--')
-    plt.legend()
+    plt.legend((line1, line2), ('Vegetation population density', 'Precipitation'))
     plt.tight_layout()
     plt.savefig('./Popdens_Timeserie.png', dpi=300)
     
     #Plot alpha vs population
     fig, ax3 = plt.subplots()
-    ax3.plot(rainfall_series, (total_veg_pop/(Nr*Nc)), 'bo'); ax3.invert_xaxis()
+    ax3.plot(rainfall_series, (total_veg_pop/(Nr*Nc)), color='C0', marker='o', ls='None'); ax3.invert_xaxis()
     ax3.set_xlabel("Precipitation (annual equivalent, mm)"); ax3.set_ylabel("Population density")
-    ax3.set_ylim([0, 1])  
+    ax3.set_ylim([0, 1])
+    ax3.xaxis.set_major_locator(MaxNLocator(integer=True))
     plt.title("Population density vs precipitation")
     ax3.grid(b=True, which='both', axis='both')
     plt.tight_layout()
@@ -112,6 +115,7 @@ def plot_veg_figures (initial_veg_grid, veg_grid, initial_apparent_veg_type_grid
     ax4.plot(time, average_age_table[:, 1], color='#1f78b4')
     ax4.plot(time, average_age_table[:, 2], color='#b2df8a')
     ax4.set_xlabel('Vegetation iterations')
+    ax4.xaxis.set_major_locator(MaxNLocator(integer=True))
     ax4.set_ylabel('Average plant age', color='k')
     plt.legend(['Grass', 'Shrub', 'Tree'])
     ax4.set_ylim([0, 1000])
@@ -126,9 +130,10 @@ def plot_veg_figures (initial_veg_grid, veg_grid, initial_apparent_veg_type_grid
     ax5.plot(time, veg_proportions[:, 1], color='#1f78b4')
     ax5.plot(time, veg_proportions[:, 2], color='#b2df8a')
     ax5.set_xlabel('Vegetation iterations')
+    ax5.xaxis.set_major_locator(MaxNLocator(integer=True))
     ax5.set_ylabel('Proportion of total veg cover', color='k')
     plt.legend(['Grass', 'Shrub', 'Tree'])
-    ax5.set_ylim([0, 1.2])
+    ax5.set_ylim([0, 1.05])
     plt.title("Plant proportions")
     ax5.grid(b=True, which='both', axis='both')
     plt.tight_layout()
@@ -154,8 +159,11 @@ def plot_grazing_figure(grazing_heat_map, mean_travel_array):
     plt.savefig('./grazer_heat_map.png', dpi=300)
 
     # Plot timeserie of mean distance traveled per each grazing event
-    plt.figure(); plt.plot(mean_travel_array)
-    plt.xlabel('Vegetation iterations'); plt.ylabel('Mean distance traveled (m)')
+    plt.figure(); ax6 = plt.gca()
+    plt.plot(mean_travel_array)
+    plt.xlabel('Vegetation iterations')
+    ax6.xaxis.set_major_locator(MaxNLocator(integer=True))
+    plt.ylabel('Mean distance traveled (m)')
     plt.title('Mean distance traveled each time a grazing agent move')
     plt.grid(b=True, which='both', axis='both')
     plt.tight_layout()

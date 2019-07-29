@@ -82,8 +82,8 @@ class Grazers(Agent):
                 else:
                     slope = (max_height_sand-min_height_sand) / (dist*cell_width) * 100
 
-                # If the cell has a slope percentage above 10% remove chances to be choosed
-                if slope > 10:
+                # If the cell has a slope percentage above 25% (14.04°) remove chances to be choosed
+                if slope > 25:
                     score -= 0.4
                 
                 # If the grazer already visited this place, it is more inclined to return there
