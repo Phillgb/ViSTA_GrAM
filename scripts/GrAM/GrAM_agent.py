@@ -10,7 +10,6 @@ from mesa.datacollection import DataCollector
 from landscape_SETUP import *
 from wind_FUNCTIONS import wrap_grid, wrap_grid_2, unwrap_grid, unwrap_grid_2
 
-
 # ------------------------GRAZERS AGENT----------------------------------------
 class Grazers(Agent):
     # Setting initials parameters
