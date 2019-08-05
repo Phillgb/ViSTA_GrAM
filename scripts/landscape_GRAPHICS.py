@@ -55,9 +55,9 @@ def plot_wind_figures (windspeed_dataset, total_sand_vol, total_aval_vol, initia
 def plot_veg_figures (initial_veg_grid, veg_grid, initial_apparent_veg_type_grid, apparent_veg_type_grid, porosity_grid, age_grid, walls_grid, interaction_field, total_veg_pop, average_age_table, veg_proportions, rainfall_series, exposed_wall_proportions):
     #Plot veg heights, initial and final 
     plt.figure(4); plt.subplot(1,2,1)
-    plt.imshow(initial_veg_grid, cmap='BuGn', interpolation='none'); plt.colorbar(); plt.clim(0, 2.0); plt.title("Initial veg heights") 
+    plt.imshow(initial_veg_grid, cmap='BuGn', interpolation='none'); plt.colorbar(); plt.clim(0, 6.0); plt.title("Initial veg heights") 
     plt.figure(4); plt.subplot(1,2,2)
-    plt.imshow(veg_grid, cmap='BuGn', interpolation='none'); plt.colorbar(); plt.clim(0, 2.0); plt.title("Final veg heights")
+    plt.imshow(veg_grid, cmap='BuGn', interpolation='none'); plt.colorbar(); plt.clim(0, 6.0); plt.title("Final veg heights")
     plt.tight_layout()
     plt.savefig('./VegHeight_fig.png', dpi=300) 
     
