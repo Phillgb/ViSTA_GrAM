@@ -3,12 +3,13 @@
 # ----------------------------------------------------
 
 # Ignore results files and originals scripts of the model
+analysis/
 data/
-Original_ViSTA_Mayaud/
 
 # Ignore figures and analysis documents
 ViSTA_Model_Scripts_analysis.docx
 metadata_MBAH.xlsx
+Series_table.xlsx
 
 # Ignore shell scripts for workload managing on calcul server
-simulationsARRAY_gen.sh 
+simulationsARRAY_gen.sh
