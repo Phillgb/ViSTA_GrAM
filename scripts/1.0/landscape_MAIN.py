@@ -29,7 +29,7 @@ porosity_grid, trunks_grid, w_soil_moisture_grid = startgrids_2(veg_grid, veg_ty
 initial_sand_heights_grid, rooting_heights_grid, initial_veg_grid, initial_apparent_veg_type_grid, apparent_veg_type_grid, sed_balance_moisture_grid = startgrids_3(sand_heights_grid, veg_grid, veg_type_grid)
 
 #Define arrays needed to fill with data
-rainfall_days, total_sand_vol, total_aval_vol, total_veg_pop, average_age_table, veg_proportions, exposed_wall_proportions, differences_grid, avalanching_grid, windspeed_grid, interaction_field, grazer_passage_grid, mean_dist_travel = startarrays()
+rainfall_days, total_sand_vol, total_aval_vol, total_veg_pop, average_age_table, veg_proportions, exposed_wall_proportions, differences_grid, avalanching_grid, windspeed_grid, interaction_field = startarrays()
 
 #Define stress series (i.e. rainfall, windspeed, fire, grazing)
 rainfall_series = define_rainfall_series() #Define rainfall time series for veg update routine
@@ -43,7 +43,7 @@ soil_moisture_presence = 24 #Reset the moisture presence to none (ie 24 hours at
 #*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*- START *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 start_time = time.time()
 print("Starting...")
-
+    
 for t in range(model_iterations):
     print("Iteration number: ", t+1)
     gc.collect() # Run garbage collector
@@ -51,7 +51,7 @@ for t in range(model_iterations):
     #------------------------------ WIND EVENT? -------------------------------
     if (t+1) % wind_event_frequency == 0:
         #------------- GET WINDSPEED, ANGLE, RAINFALL DATA FROM SERIES --------
-        unobstructed_windspeed = windspeed_dataset[wind_t]
+        unobstructed_windspeed = windspeed_dataset[wind_t];
         wind_angle = wind_angle_dataset[wind_t]; wind_angle = windangle_adaptor(wind_angle)
         rainfall_presence = rainfall_days[t] #Check whether rain fell during the previous timestep (important for sand movement routine)
         
@@ -77,7 +77,7 @@ for t in range(model_iterations):
             
             #------ CALCULATE DEPOSITION TRAJECTORIES FOR EACH TARGET CELL ----
             path_cell_location_depos, path_depos = depositiontrajectories(wind_angle)
-              
+               
             #-------------------------- SAND MOVEMENT -------------------------
             differences_grid, w_soil_moisture_grid, sed_balance_moisture_grid, soil_moisture_presence = sand_movement(w_sand_heights_grid, w_veg_grid, w_rooting_heights_grid, w_soil_moisture_grid, w_porosity_grid, w_walls_grid, windspeed_grid, sed_balance_moisture_grid, path_cell_location, path_cell_location_depos, path_depos, prob_depos_bare, prob_depos_sand, rainfall_presence, soil_moisture_presence, t)    
             if boundary_conditions == 'periodic': #Depending on boundary conditions, unwrap the differences_grid or just lose sand out of the edges     
@@ -99,36 +99,21 @@ for t in range(model_iterations):
             elif boundary_conditions == 'open':
                 avalanching_grid = unwrap_grid_2(avalanching_grid, 0); avalanching_grid[np.isnan(avalanching_grid)] = 0
             sand_heights_grid += avalanching_grid #Add the height changes to modified sand heights
-
+        
         wind_t += 1
         print("Wind event occurred. Windspeed =", round(unobstructed_windspeed, 2), ", Wind angle =", round(wind_angle, 2))
- 
+        
     #------------------------ UPDATE VEGETATION? ------------------------------
     if (t+1) % veg_update_frequency == 0:
-        fire_event = fire_series[veg_t]; grazing_event = grazing_series[veg_t]
-
-        # If module GrAM module activated, run the module for "grazing_event_duration" number of iteration.
-        if grazing_event == 1 and grazing_event_timeseries == 'GrAM':
-            print("Grazing event occured. GrAM module called for simulation")
-            # The number of grazer on the grid is determined by the ratio of the stocking rate for the grid size in consideration of it's real life equivalency in hectares.
-            num_grazer = np.ceil(stocking_rate * Nc*Nr * np.power(cell_width, 2)/10000).astype(int)
-            print("Number of grazer on grid: ", num_grazer)
-
-            # Configure the module and run it for a defined number of iterations
-            module = GrAM(Nc, Nr, veg_grid, veg_type_grid, sand_heights_grid, walls_presence_grid, grazer_passage_grid, num_grazer)
-            veg_type, veg_type_grid, grazer_passage_grid, dist_traveled_array = module.run(grazing_event_duration*2)
-            mean_dist_travel[veg_t] = np.mean(dist_traveled_array)
-
+        fire_event = fire_series[veg_t]; grazing_event = grazing_series[veg_t];
         veg_grid, veg_type_grid, age_grid, cum_growth_grid, actual_biomass_grid, veg_occupation_grid, rooting_heights_grid, trunks_grid, porosity_grid, drought_grid, grid, interaction_field, veg_population, average_age_array, current_grass_proportion, current_shrub_proportion, current_tree_proportion = veg_update(veg_grid, veg_type_grid, age_grid, sand_heights_grid, cum_growth_grid, actual_biomass_grid, veg_occupation_grid, rooting_heights_grid, trunks_grid, porosity_grid, drought_grid, grid, walls_grid, rainfall_series, veg_t, fire_event, grazing_event)
         total_veg_pop[veg_t] = veg_population
         average_age_table[veg_t, 0] = average_age_array[0]; average_age_table[veg_t, 1] = average_age_array[1]; average_age_table[veg_t, 2] = average_age_array[2]
         veg_proportions[veg_t, 0] = current_grass_proportion; veg_proportions[veg_t, 1] = current_shrub_proportion; veg_proportions[veg_t, 2] = current_tree_proportion        
-        apparent_veg_type_grid = copy.copy(veg_type_grid); apparent_veg_type_grid[np.where(veg_grid == 0)] = 0 #It's APPARENT because all cells are attributed a potential veg type, but those that have zero height need to be seen as zero
-        
-        
-        veg_t += 1      
+        apparent_veg_type_grid = copy.copy(veg_type_grid); apparent_veg_type_grid[np.where(veg_grid == 0)] = 0 #It's APPARENT because all cells are attributed a potential veg type, but those that have zero height need to be seen as zero        
+        veg_t += 1        
         print("Veg is updated. Veg density =", round(veg_population/(Nr*Nc), 2))
- 
+        
     #------------------------- STORE DATA TO GRID? ----------------------------
     if (t+1) % saving_frequency_movie == 0:
         saving_grid_sand, saving_grid_veg, saving_grid_apparent_veg_type, saving_grid_age, saving_grid_wind, saving_grid_moisture, saving_loc = savegrids(sand_heights_grid, veg_grid, apparent_veg_type_grid, age_grid, windspeed_grid, w_soil_moisture_grid, saving_loc, t)
@@ -142,50 +127,38 @@ for t in range(model_iterations):
     else:
         exposed_wall_proportions[t] = 0
     differences_grid = np.zeros((Nrw+2, Ncw+2)); avalanching_grid = np.zeros((Nrw, Ncw)) #Re-zero the differences and avalanching grid
-
+         
 #*-*-*-*-*-*-*-*-*-*-*-*-*-*-*- WIND STOPS BLOWING *-*-*-*-*-*-*-*-*-*-*-*-*-*-
 elapsed = time.time() - start_time
-print("Total sand height START =", sum(map(sum, initial_sand_heights_grid))); print("Total sand height END =", sum(map(sum, sand_heights_grid))); print("Time elapsed =", elapsed, "seconds"); print("Total sand volume displaced across simulation = ", sum(total_sand_vol), "m^3")
+print("Total sand height START =", sum(map(sum, initial_sand_heights_grid))); print("Total sand height END =", sum(map(sum, sand_heights_grid))); print("Time elapsed =", elapsed, "seconds")
 
 #*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*- PLOTTING *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
-
 plot_wind_figures(windspeed_dataset, total_sand_vol, total_aval_vol, initial_sand_heights_grid, sand_heights_grid, windspeed_grid, w_soil_moisture_grid)
 plot_veg_figures(initial_veg_grid, veg_grid, initial_apparent_veg_type_grid, apparent_veg_type_grid, porosity_grid, age_grid, walls_grid, interaction_field, total_veg_pop, average_age_table, veg_proportions, rainfall_series, exposed_wall_proportions)
+plt.show
 
-if grazing_event_timeseries == "GrAM":
-
-    # Unwrap grazer passage grid before representation
-    if boundary_conditions == 'periodic':
-        grazer_passage_grid = unwrap_grid(grazer_passage_grid, 0)
-    elif boundary_conditions == 'open':
-        grazer_passage_grid = unwrap_grid_2(grazer_passage_grid, 0)
-        
-    plot_grazing_figure(grazer_passage_grid, mean_dist_travel)
-    
 #*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* DATA STORAGE *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 #np.savetxt('Frames_sand_height', saving_grid_sand, delimiter=',')
 #np.savetxt('Frames_veg_height', saving_grid_veg, delimiter=',')
 #np.savetxt('Frames_age', saving_grid_age, delimiter=',')
 #np.savetxt('Frames_veg_type', saving_grid_apparent_veg_type, delimiter=',')
 #np.savetxt('Frames_moisture', saving_grid_moisture, delimiter=',')
-np.savetxt('Final_neighbourhood_stress.txt', interaction_field, delimiter=',')
-np.savetxt('Final_veg_grid.txt', veg_grid, delimiter=',')
-np.savetxt('Final_age_grid.txt', age_grid, delimiter=',')
-np.savetxt('Final_veg_type_grid.txt', apparent_veg_type_grid, delimiter=',')
-np.savetxt('Final_wind_grid.txt', windspeed_grid, delimiter=',')
-np.savetxt('Final_sand_grid.txt', sand_heights_grid, delimiter=',')
-np.savetxt('Wind_frames.txt', saving_grid_wind, delimiter=',')
-np.savetxt('Initial_veg_grid.txt', initial_veg_grid, delimiter=',')
-np.savetxt('Initial_sand_grid.txt', initial_sand_heights_grid, delimiter=',')
-np.savetxt('Final_soil_moisture_grid.txt', w_soil_moisture_grid[((2*n_shells)+1):(Nrw+1), ((2*n_shells)+1):(Ncw+1)], delimiter=',')
-np.savetxt('Population_density.txt', (total_veg_pop/(Nr*Nc)), delimiter=',')
-np.savetxt('Veg_proportions.txt', veg_proportions, delimiter=',')
-np.savetxt('Average_ages.txt', average_age_table, delimiter=',')
-np.savetxt('Total_sand_vol.txt', total_sand_vol, delimiter=',')
-np.savetxt('Total_aval_vol.txt', total_aval_vol, delimiter=',')
-np.savetxt('Exposed_wall_proportions.txt', exposed_wall_proportions, delimiter=',')
-np.savetxt('Rainfall_series.txt', rainfall_series, delimiter=',')
-np.savetxt('Windspeed series.txt', windspeed_dataset, delimiter=',')
-np.savetxt('Grazing_heat_map_grid.txt', grazer_passage_grid, delimiter=',')
-np.savetxt('Grazer_dist_traveled.txt', mean_dist_travel, delimiter=',')
+#np.savetxt('Final_neighbourhood_stress', interaction_field, delimiter=',')
+np.savetxt('Final_veg_grid', veg_grid, delimiter=',')
+np.savetxt('Final_age_grid', age_grid, delimiter=',')
+np.savetxt('Final_veg_type_grid', apparent_veg_type_grid, delimiter=',')
+#np.savetxt('Final_wind_grid', windspeed_grid, delimiter=',')
+#np.savetxt('Final_sand_grid', sand_heights_grid, delimiter=',')
+#np.savetxt('Wind_frames', saving_grid_wind, delimiter=',')
+#np.savetxt('Initial_veg_grid', initial_veg_grid, delimiter=',')
+#np.savetxt('Initial_sand_grid', initial_sand_heights_grid, delimiter=',')
+#np.savetxt('Final_soil_moisture_grid', w_soil_moisture_grid[((2*n_shells)+1):(Nrw+1), ((2*n_shells)+1):(Ncw+1)], delimiter=',')
+#np.savetxt('Population_density', (total_veg_pop/(Nr*Nc)), delimiter=',')
+#np.savetxt('Veg_proportions', veg_proportions, delimiter=',')
+#np.savetxt('Average_ages', average_age_table, delimiter=',')
+#np.savetxt('Total_sand_vol', total_sand_vol, delimiter=',')
+#np.savetxt('Total_aval_vol', total_aval_vol, delimiter=',')
+#np.savetxt('Exposed_wall_proportions', exposed_wall_proportions, delimiter=',')
+#np.savetxt('Rainfall_series', rainfall_series, delimiter=',')
+#np.savetxt('Windspeed series', windspeed_dataset, delimiter=',')
 #*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-

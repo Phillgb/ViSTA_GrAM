@@ -114,7 +114,7 @@ def define_fire_grazing_series():
     elif fire_event_timeseries == 'periodic':        
         xx = math.floor(fire_event_frequency/veg_update_freq_equivalent)
         yy = math.floor(veg_iterations/xx)
-        for zz in range(1, yy+1):
+        for zz in range(1, yy):
             fire_series[(xx*zz)-1] = 1
     else:
         print('WARNING: The stress timeseries model is not entered correctly')
@@ -123,11 +123,11 @@ def define_fire_grazing_series():
         grazing_series = grazing_series
     elif grazing_event_timeseries == 'constant':
         grazing_series[0:veg_iterations] = 1
-    elif grazing_event_timeseries == 'periodic' or grazing_event_timeseries == 'GrAM':
+    elif grazing_event_timeseries == 'periodic':
         xx = math.floor(grazing_event_frequency/veg_update_freq_equivalent)
         yy = math.floor(veg_iterations/xx)
-        for zz in range(1, yy+1):
-            grazing_series[(xx*zz)-1] = 1
+        for zz in range(0, yy):
+            grazing_series[xx*zz] = 1
     else:
         print('WARNING: The stress timeseries model is not entered correctly')
             

@@ -45,10 +45,10 @@ class Grazers(Agent):
                 # The vegetation need to be visible to influence the grazer decision of movement
                 if self.model.veg_height_grid[r, c] > veg_threshold:
                     if self.model.veg_type_grid[r, c] == 1: # Check if Vegetation type of target cell is grass
-                        if (self.model.veg_height_grid[r, c]*10 <= 7.5 and # Check if the biomass of the cell is between 7kg/cell and
-                            self.model.veg_height_grid[r, c]*10 >= 3):  # 3kg/cell (veg_height in m * equivalent of 10kg/cell/m in height)
+                        if (self.model.veg_height_grid[r, c]/max_height_grass <= 0.75 and # Check if the height of vegetation on the grid is between
+                            self.model.veg_height_grid[r, c]/max_height_grass >= 0.3):  
                             score += 0.8
-                        elif self.model.veg_height_grid[r, c]*4 <= 2: # Check if the biomass is less 2 kg/m2
+                        elif self.model.veg_height_grid[r, c]/max_height_grass <= 0.2: # Check if the height of the vegetation is
                             score += 0.4
                         else:
                             score += 0.6
@@ -103,7 +103,6 @@ class Grazers(Agent):
 
 
     def move(self, new_pos):
-        self.model.travel_dist.append(np.sqrt(np.power((self.pos[0]-new_pos[0])*cell_width, 2) + np.power((self.pos[1]-new_pos[1])*cell_width, 2)))
         self.model.grid.move_agent(self, new_pos)
         self.pos_mem_grid[new_pos[1], new_pos[0]]
         
@@ -112,13 +111,15 @@ class Grazers(Agent):
         wx = grid_start + self.pos[0] # Addapt the x coordinate of the grazer position to corresponding coordinates in a wrapped grid
         wy = grid_start + self.pos[1] # Addapt the y coordinate of the grazer position to corresponding coordinates in a wrapped grid
         self.grazed_grid = np.zeros((Nrw, Ncw)) # Temporary grid representing the grazing done by the agent
-
+        self.model.veg_height_grid = wrap_grid(self.model.veg_height_grid, 0)
+        
         # Eating loop of a 2x2 cell area around the position of the grazer
         for dy in range(-2, 3):
             for dx in range(-2, 3):
-                self.grazed_grid[wy+dy, wx+dx] += 0.07
-                self.model.grazer_passage_grid[wy+dy, wx+dx] += 1
-
+                if self.model.veg_height_grid[wy+dy, wx+dx] > veg_threshold:
+                    self.grazed_grid[wy+dy, wx+dx] += 0.03
+                    self.model.grazer_passage_grid[wy+dy, wx+dx] += 1
+                
         # Unwrap the grazing grid to match the size of original vegetation grid
         if boundary_conditions == 'periodic':
             self.grazed_grid = unwrap_grid(self.grazed_grid, 0)

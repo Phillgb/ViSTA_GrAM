@@ -30,7 +30,6 @@ class GrAM(Model):
         self.sand_grid = sand_grid
         self.wall_grid = wall_grid
         self.grazer_passage_grid = grazer_passage_grid
-        self.travel_dist = []
         self.grid = SingleGrid(self.width, self.height, torus=True)
         self.schedule = RandomActivationByBreed(self)
 
@@ -51,4 +50,4 @@ class GrAM(Model):
         for i in range(n):
             self.step()
 
-        return self.veg_height_grid, self.veg_type_grid, self.grazer_passage_grid, self.travel_dist
+        return self.veg_height_grid, self.veg_type_grid, self.grazer_passage_grid
