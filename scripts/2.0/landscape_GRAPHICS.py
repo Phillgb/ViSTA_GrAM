@@ -37,7 +37,7 @@ def plot_wind_figures (windspeed_dataset, total_sand_vol, total_aval_vol, initia
     plt.figure(2); plt.subplot(1,2,1)
     plt.imshow(initial_sand_heights_grid, cmap='YlOrBr', interpolation='none', origin='lower'); plt.title("Initial sand heights"); plt.colorbar()
     plt.subplot(1,2,2)
-    plt.imshow(sand_heights_grid, cmap='YlOrBr', interpolation='none'); plt.title("Final sand heights"); plt.colorbar()
+    plt.imshow(sand_heights_grid, cmap='YlOrBr', interpolation='none', origin='lower'); plt.title("Final sand heights"); plt.colorbar()
     plt.tight_layout()
     plt.savefig('./SandHeight_fig.png', dpi=300)
     
@@ -45,7 +45,7 @@ def plot_wind_figures (windspeed_dataset, total_sand_vol, total_aval_vol, initia
     plt.figure(3); plt.subplot(1,2,1)  
     plt.imshow(windspeed_grid, cmap='Greys', interpolation='none', origin='lower'); plt.title("Final windspeed grid"); plt.colorbar()
     plt.subplot(1,2,2)
-    plt.imshow(w_soil_moisture_grid, cmap='Blues', interpolation='none'); plt.clim(0, 1.0); plt.title("Final moisture grid"); plt.colorbar()
+    plt.imshow(w_soil_moisture_grid, cmap='Blues', interpolation='none', origin='lower'); plt.clim(0, 1.0); plt.title("Final moisture grid"); plt.colorbar()
     plt.tight_layout()
     plt.savefig('./WindspeedMoist_fig.png', dpi=300)
 
