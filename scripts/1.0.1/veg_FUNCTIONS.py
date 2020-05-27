@@ -114,7 +114,7 @@ def define_fire_grazing_series():
     elif fire_event_timeseries == 'periodic':        
         xx = math.floor(fire_event_frequency/veg_update_freq_equivalent)
         yy = math.floor(veg_iterations/xx)
-        for zz in range(1, yy+1):
+        for zz in range(1, yy):
             fire_series[(xx*zz)-1] = 1
     else:
         print('WARNING: The stress timeseries model is not entered correctly')
@@ -126,10 +126,8 @@ def define_fire_grazing_series():
     elif grazing_event_timeseries == 'periodic':
         xx = math.floor(grazing_event_frequency/veg_update_freq_equivalent)
         yy = math.floor(veg_iterations/xx)
-        for zz in range(1, yy+1):
-            grazing_series[(xx*zz)-1] = 1
-    elif grazing_event_timeseries == 'GrAM':
-        print('The GrAM module is used to simulate spatial grazing')
+        for zz in range(0, yy):
+            grazing_series[xx*zz] = 1
     else:
         print('WARNING: The stress timeseries model is not entered correctly')
             
@@ -173,9 +171,7 @@ def veg_update(veg_grid, veg_type_grid, age_grid, sand_heights_grid, cum_growth_
     next_age = copy.copy(age_grid) #Replicate age matrix to update it with new ages
     next_biomass = copy.copy(actual_biomass_grid) #Replicate biomass matrix to update it with new biomass
     next_veg_type = copy.copy(veg_type_grid) #Replicate veg type matrix to update it with new veg type if plant dies
-    veg_gain_grid = np.zeros((Nr, Nc)) #Grid storing the vegetation growth on each cell during the iteration
-    mean_veg_gain = np.zeros(3) #To fill with the average gain in height of grasses, shrubs and trees in this iteration
-
+    
     #---------------------------------- Start ---------------------------------
     print("Grass %:", round(current_grass_proportion, 2), "Shrub %:", round(current_shrub_proportion, 2), "Tree %:", round(current_tree_proportion, 2))
     
@@ -232,11 +228,6 @@ def veg_update(veg_grid, veg_type_grid, age_grid, sand_heights_grid, cum_growth_
                 biomass_exp_factor = biomass_exp_factor_grass
                 biomass_midpoint_growth = biomass_midpoint_growth_grass
                 max_biomass = max_biomass_grass
-                if grazing_event_timeseries == 'GrAM': # Update the cumulated growth grid based on past action of grazer on grass growth
-                    if veg_grid[R, C] > 0 and veg_grid[R, C] < max_veg_height:
-                        cum_growth_grid[R, C] = (-math.log((max_veg_height/veg_grid[R, C])-1)/biomass_exp_factor)+biomass_midpoint_growth
-                    elif veg_grid[R, C] <= 0:
-                        cum_growth_grid[R, C] = veg_update_freq_equivalent
             elif veg_type_polled_cell == 2:
                 max_veg_height = max_height_shrub
                 shell_weight = shell_weight_shrub
@@ -361,11 +352,11 @@ def veg_update(veg_grid, veg_type_grid, age_grid, sand_heights_grid, cum_growth_
                 alpha = (((period_rainfall*(12/veg_update_freq_equivalent)) - no_effect_rainfall_tree)/no_effect_rainfall_tree)*alpha_multiplier_tree #Rainfall stress for trees
             total_stress = (sum(total)) + alpha #This is the T-score
             neigh_score = ((1/(1+math.exp(total_stress*-5)))) #This is T-squiggle    
-            interaction_field[R, C] = neigh_score
+            interaction_field[R, C] = neigh_score 
             
             #Calculate the growth unit
             growth_unit = ((max_growth+max_decline)/(1+math.exp(-growthunit_exp_factor*(neigh_score - growthunit_midpoint_growth)))) - max_decline #Growth unit depends on t-squiggle - rainfall has no effect at value of 'no_effect_t_squiggle'
-
+                        
             #Calculate cumulated growth
             cumulated_growth = cum_growth_grid[R, C] + (growth_unit*veg_update_freq_equivalent) #Combine previous growth units and add the effect from rain - multiply by veg_update_freq_equivalent because to be proportional to how many months have passed since last veg update                    
  
@@ -384,12 +375,9 @@ def veg_update(veg_grid, veg_type_grid, age_grid, sand_heights_grid, cum_growth_
                 next_age[R, C] += veg_update_freq_equivalent
                 cum_growth_grid[R, C] = cumulated_growth #Put the adapted cumulated growth into the grid for next update                
                 actual_biomass = max_biomass/(1+(math.exp(-biomass_exp_factor*(cumulated_growth - biomass_midpoint_growth)))) #Find what the cumulated growth is equivalent to in real biomass (because medium-sized plants will accrue biomass more readily than v big or v small plants)
-                next_biomass[R, C] = actual_biomass #Actual biomass is not the same as cumulated growth
-                new_veg_height = (actual_biomass/max_biomass)*max_veg_height #Simple proportional conversion from biomass to veg height
-                veg_gain_grid[R, C] = new_veg_height-veg_grid[R, C] #Store the difference in height between last and current state of vegetation in a new grid
-
-                if new_veg_height >= veg_threshold: #Below a threshold, biomass is just stored as seedling, the veg doesn't have any height
-                    veg_grid[R, C] = new_veg_height                  
+                next_biomass[R, C] = actual_biomass #Actual biomass is not the same as cumulated growth                  
+                if (actual_biomass/max_biomass)*max_veg_height >= veg_threshold: #Below a threshold, biomass is just stored as seedling, the veg doesn't have any height
+                    veg_grid[R, C] = (actual_biomass/max_biomass)*max_veg_height #Simple proportional conversion from biomass to veg height                  
                 else:
                     veg_grid[R, C] = 0
             
@@ -398,7 +386,7 @@ def veg_update(veg_grid, veg_type_grid, age_grid, sand_heights_grid, cum_growth_
                     trunks_grid[R, C] = trunk_ratio_polled_cell*veg_grid[R, C]
                 else: #Allocate stated trunk proportion to polled tree
                     trunks_grid[R, C] = start_grid_trunks*veg_grid[R, C]
-
+                    
             #------------------- Drought stress -------------------------------            
             if neigh_score < t_squiggle_drought_threshold: #Add drought units to drought grid if neighbourhood score is negative                                    
                 drought_grid[R, C] += veg_update_freq_equivalent*((t_squiggle_drought_threshold - neigh_score)/t_squiggle_drought_threshold)
@@ -417,7 +405,7 @@ def veg_update(veg_grid, veg_type_grid, age_grid, sand_heights_grid, cum_growth_
             if consecutive_droughts > 0:
                 drought_stress = (1 - math.exp(-b_parameter*consecutive_droughts))*drought_importance_factor
             else:
-                drought_stress = 0
+                drought_stress = 0                          
             
             #-------------- Sediment balance stress ---------------------------
             if sed_balance_stress_switch == 'on':                 
@@ -459,7 +447,7 @@ def veg_update(veg_grid, veg_type_grid, age_grid, sand_heights_grid, cum_growth_
                 sed_stress = 0           
             
             #------------------- Grazing stress -------------------------------             
-            if grazing_event == 1 and (grazing_event_timeseries == 'periodic' or grazing_event_timeseries == 'constant'): #If there is a grazing event managed by ViSTA protocol           
+            if grazing_event == 1: #If there is a grazing event            
                 if veg_type_polled_cell == 1: #If cell is a grass, it can be grazed
                     if stocking_rate <= 0.06: #Below this value, the grazing stress varies with stocking rate (LSU per hectare)      
                         grazing_stress = stocking_rate*11
@@ -507,7 +495,7 @@ def veg_update(veg_grid, veg_type_grid, age_grid, sand_heights_grid, cum_growth_
                 elif recolonisation_dynamism == 'on':
                     if (period_rainfall*(12/veg_update_freq_equivalent)) <= veg_dominance_rainfall: #For dry conditions
                         alpha_grass = np.random.normal(0.5 - ((period_rainfall*(12/veg_update_freq_equivalent))/1200), 0.1) #Multiplier to increase or decrease grass proportion depending on precipitation
-                        alpha_shrub = np.random.normal(0.1 - ((period_rainfall*(12/veg_update_freq_equivalent))/3000), 0.1) #Multiplier to increase or decrease shrub proportion depending on precipitation
+                        alpha_shrub = np.random.normal(0.1 - ((period_rainfall*(12/veg_update_freq_equivalent))/3000), 0.1) #Multiplier to increase or decrease grass proportion depending on precipitation
                         alpha_tree = np.random.normal(-0.25 + ((period_rainfall*(12/veg_update_freq_equivalent))/2400), 0.1) #Multiplier to increase or decrease tree proportion depending on precipitation
                     elif (period_rainfall*(12/veg_update_freq_equivalent)) <= (veg_dominance_rainfall*2): #Below 500 mm/yr, grass dominates, from 500 mm/yr onwards, tree dominates
                         alpha_grass = np.random.normal(0.0, 0.1) #The multiplier can't be less than 0%
@@ -559,7 +547,7 @@ def veg_update(veg_grid, veg_type_grid, age_grid, sand_heights_grid, cum_growth_
                 cum_growth_grid[R, C] = cumulated_growth #Put the adapted cumulated growth into the grid for next update                
                 actual_biomass = veg_update_freq_equivalent
                 next_biomass[R, C] = actual_biomass #Actual biomass is not the same as cumulated growth                  
-                veg_grid[R, C] = 0 #Reset veg height to zero
+                veg_grid[R, C] = 0. #Reset veg height to zero
                 drought_grid[R, C] = 0 #Reset the drought grid, otherwise dead plants have no chance!
                 trunks_grid[R, C] = 0 #Reset the trunks grid
                 #Reset porosity
@@ -576,14 +564,12 @@ def veg_update(veg_grid, veg_type_grid, age_grid, sand_heights_grid, cum_growth_
                 veg_occupation_grid[R, C] = 0 #Tell the grid that the cell is now unoccupied
                 
     #Update all grids
-    mean_veg_gain[0] = np.mean(veg_gain_grid[np.where(veg_type_grid == 1)]) #Average height gained by grass this update
-    mean_veg_gain[1] = np.mean(veg_gain_grid[np.where(veg_type_grid == 2)]) #Ditto for shrubs
-    mean_veg_gain[2] = np.mean(veg_gain_grid[np.where(veg_type_grid == 3)]) #Ditto for tree
     grid = copy.copy(update); age_grid = copy.copy(next_age); actual_biomass_grid = copy.copy(next_biomass); veg_type_grid = copy.copy(next_veg_type)
     #z1  = np.where(veg_grid>=veg_threshold) #Only count cells with veg height>threshold
     z1  = np.where(age_grid>=age_threshold) #Only count cells with age>threshold
     veg_population = sum(grid[z1])
     average_age_array[0] = (sum(age_grid[np.where(veg_type_grid == 1)]))/((veg_type_grid == 1).sum()+1); average_age_array[1] = (sum(age_grid[np.where(veg_type_grid == 2)]))/((veg_type_grid == 2).sum()+1); average_age_array[2] = (sum(age_grid[np.where(veg_type_grid == 3)]))/((veg_type_grid == 3).sum()+1) #Calculate average age of each plant type
         
-    return (veg_grid, veg_type_grid, age_grid, cum_growth_grid, actual_biomass_grid, veg_occupation_grid, rooting_heights_grid, trunks_grid, porosity_grid, drought_grid, grid, interaction_field, veg_population, average_age_array, current_grass_proportion, current_shrub_proportion, current_tree_proportion, mean_veg_gain)
+    return (veg_grid, veg_type_grid, age_grid, cum_growth_grid, actual_biomass_grid, veg_occupation_grid, rooting_heights_grid, trunks_grid, porosity_grid, drought_grid, grid, interaction_field, veg_population, average_age_array, current_grass_proportion, current_shrub_proportion, current_tree_proportion)
 #*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+    

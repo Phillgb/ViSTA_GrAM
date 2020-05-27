@@ -138,7 +138,7 @@ def define_fire_grazing_series():
 
 #*-*-*-*-*-*-*-*-*-*-*-*-*-*-*- VEG UPDATE *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
-def veg_update(veg_grid, veg_type_grid, age_grid, sand_heights_grid, cum_growth_grid, actual_biomass_grid, veg_occupation_grid, rooting_heights_grid, trunks_grid, porosity_grid, drought_grid, grid, walls_grid, rainfall_series, veg_t, fire_event, grazing_event):
+def veg_update(veg_grid, veg_type_grid, age_grid, sand_heights_grid, cum_growth_grid, actual_biomass_grid, veg_occupation_grid, rooting_heights_grid, trunks_grid, porosity_grid, drought_grid, grid, walls_grid, rainfall_series, veg_t, fire_event, grazing_event, graz_update):
     #----------------------- Function description -----------------------------
     # Performs the full vegetation update routine, where veg grows and dies according to stresses
     # 'veg_grid' is the vertical height of plants (Nr x Nc)
@@ -232,7 +232,7 @@ def veg_update(veg_grid, veg_type_grid, age_grid, sand_heights_grid, cum_growth_
                 biomass_exp_factor = biomass_exp_factor_grass
                 biomass_midpoint_growth = biomass_midpoint_growth_grass
                 max_biomass = max_biomass_grass
-                if grazing_event_timeseries == 'GrAM': # Update the cumulated growth grid based on past action of grazer on grass growth
+                if graz_update[R][C] > 0: # Update the cumulated growth grid based on past action of grazer on grass growth
                     if veg_grid[R, C] > 0 and veg_grid[R, C] < max_veg_height:
                         cum_growth_grid[R, C] = (-math.log((max_veg_height/veg_grid[R, C])-1)/biomass_exp_factor)+biomass_midpoint_growth
                     elif veg_grid[R, C] <= 0:
@@ -467,6 +467,9 @@ def veg_update(veg_grid, veg_type_grid, age_grid, sand_heights_grid, cum_growth_
                         grazing_stress = 0.66
                 else:
                     grazing_stress = 0.01 #If cell is a shrub or tree, it can't be grazed, but can be trampled
+            elif grazing_event == 1 and grazing_event_timeseries == 'GrAM': # If the grazing event is managed by GrAM only apply trampling stress to the shrub and the tree.
+                if veg_type_polled_cell != 1:
+                    grazing_stress = 0.01
             else: #No grazing occurs
                 grazing_stress = 0.0
             

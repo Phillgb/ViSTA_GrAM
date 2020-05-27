@@ -52,13 +52,14 @@ def startarrays():
     windspeed_grid = np.zeros((Nr, Nc)) #Grid to form basis for windspeed calculations
     interaction_field = np.zeros((Nr, Nc)) #Grid to form basis for neighbourhood interactions between plants
     grazer_passage_grid = np.zeros((Nrw, Ncw)) # Grid to store the number of passage of each grazer on each cell (GrAM module).
+    last_grazer_passage = np.zeros((Nrw,Ncw)) # Grid to track past state of grazer passage grid. (GrAM module)
     avail_forage = np.zeros(model_iterations) #Array keeping track of apparent grass on the grid and forag available for grazers.
     veg_growth_factor = np.zeros((veg_iterations, 3)) # Mean vegetation height gained over the grid at each vegetation update for each vegetation type. This allow to assess the general health of the environnement.
     actual_grazed_series = np.zeros(grazing_iterations) #Series of the total mass grazed each iterations
     veg_growth_mass = np.zeros(veg_iterations) #Series of vegetation mass that grows back each iteration
 
     return (rainfall_days, total_sand_vol, total_aval_vol, total_veg_pop, average_age_table, veg_proportions, exposed_wall_proportions, differences_grid, avalanching_grid, windspeed_grid,
-     interaction_field, grazer_passage_grid, avail_forage, veg_growth_factor, actual_grazed_series, veg_growth_mass)
+     interaction_field, grazer_passage_grid, last_grazer_passage, avail_forage, veg_growth_factor, actual_grazed_series, veg_growth_mass)
 #*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
 #*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*- START GRIDS *-*-*-*-*-*-*-*-*-*-*-*-*-*-*

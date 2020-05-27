@@ -51,14 +51,8 @@ def startarrays():
     avalanching_grid = np.zeros((Nrw, Ncw)) #Grid to form basis for avalanching grid calculations
     windspeed_grid = np.zeros((Nr, Nc)) #Grid to form basis for windspeed calculations
     interaction_field = np.zeros((Nr, Nc)) #Grid to form basis for neighbourhood interactions between plants
-    grazer_passage_grid = np.zeros((Nrw, Ncw)) # Grid to store the number of passage of each grazer on each cell (GrAM module).
-    avail_forage = np.zeros(model_iterations) #Array keeping track of apparent grass on the grid and forag available for grazers.
-    veg_growth_factor = np.zeros((veg_iterations, 3)) # Mean vegetation height gained over the grid at each vegetation update for each vegetation type. This allow to assess the general health of the environnement.
-    actual_grazed_series = np.zeros(grazing_iterations) #Series of the total mass grazed each iterations
-    veg_growth_mass = np.zeros(veg_iterations) #Series of vegetation mass that grows back each iteration
-
-    return (rainfall_days, total_sand_vol, total_aval_vol, total_veg_pop, average_age_table, veg_proportions, exposed_wall_proportions, differences_grid, avalanching_grid, windspeed_grid,
-     interaction_field, grazer_passage_grid, avail_forage, veg_growth_factor, actual_grazed_series, veg_growth_mass)
+    
+    return (rainfall_days, total_sand_vol, total_aval_vol, total_veg_pop, average_age_table, veg_proportions, exposed_wall_proportions, differences_grid, avalanching_grid, windspeed_grid, interaction_field)
 #*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
 #*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*- START GRIDS *-*-*-*-*-*-*-*-*-*-*-*-*-*-*
@@ -174,8 +168,8 @@ def startgrids():
                 veg_grid[R, C] = 0. #No veg height
     
     #Remove plants from walls, as they can grow in the same place as a wall!
-    age_grid[np.where(walls_grid > 0)] = 0
-    veg_grid[np.where(walls_grid > 0)] = 0
+    age_grid[np.where(walls_grid > 0)] = 0;
+    veg_grid[np.where(walls_grid > 0)] = 0;
     
     return (sand_heights_grid, veg_grid, veg_type_grid, age_grid, cum_growth_grid, actual_biomass_grid, veg_occupation_grid, drought_grid, grid, walls_grid, walls_presence_grid)
 #*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
@@ -226,7 +220,7 @@ def startgrids_3(sand_heights_grid, veg_grid, veg_type_grid):
     initial_sand_heights_grid = copy.copy(sand_heights_grid)
     rooting_heights_grid = copy.copy(sand_heights_grid) #Rooting heights assumed to be at the initial sand surface
     initial_veg_grid = copy.copy(veg_grid)
-    initial_apparent_veg_type_grid = copy.copy(veg_type_grid); initial_apparent_veg_type_grid[np.where(initial_veg_grid <= veg_threshold)] = 0 #It's APPARENT because all cells are attributed a potential veg type, but those that have zero height need to be seen as zero 
+    initial_apparent_veg_type_grid = copy.copy(veg_type_grid); initial_apparent_veg_type_grid[np.where(initial_veg_grid == 0)] = 0 #It's APPARENT because all cells are attributed a potential veg type, but those that have zero height need to be seen as zero 
     apparent_veg_type_grid = veg_type_grid #Assign this ahead of routine in case veg isn't updated during the run
     sed_balance_moisture_grid = np.zeros((Nrw+2, Ncw+2)) #Just blank sediment balance to begin with
     
@@ -240,17 +234,15 @@ def startgrids_manual():
 
     #---------------------------------- Start ---------------------------------
     #Define main grids manually    
-    #sand_heights_grid = np.ones((Nr, Nc))*1 #sand_heights_grid[20:40, 20:40] = 0.4    
-    walls_grid = np.zeros((Nr, Nc)) #; walls_grid[10:15, 10:15] = 2.2; walls_grid[20:25, 20:25] = 4 #Grid of where solid walls are located        
-    #veg_grid = np.ones((Nr, Nc))*1; veg_grid[np.where(walls_grid > 0)] = 0 #veg_grid[10:40, 10:40] = 4
-    #age_grid = np.ones((Nr, Nc))*300; age_grid[np.where(walls_grid > 0)] = 0 #age_grid[10:40, 10:40] = 300
-    #veg_type_grid = np.ones((Nr, Nc)) #veg_type_grid[10:40, 10:40] = 2 #Beware - can't have any zeros in veg_type_grid (a veg type has to be ascribed)  
+    sand_heights_grid = np.ones((Nr, Nc))*1; #sand_heights_grid[20:40, 20:40] = 0.4    
+    walls_grid = np.zeros((Nr, Nc)); walls_grid[10:15, 10:15] = 2.2; walls_grid[20:25, 20:25] = 4 #Grid of where solid walls are located        
+    veg_grid = np.ones((Nr, Nc))*1; veg_grid[np.where(walls_grid > 0)] = 0; #veg_grid[10:40, 10:40] = 4
+    age_grid = np.ones((Nr, Nc))*300; age_grid[np.where(walls_grid > 0)] = 0; #age_grid[10:40, 10:40] = 300
+    veg_type_grid = np.ones((Nr, Nc)); #veg_type_grid[10:40, 10:40] = 2 #Beware - can't have any zeros in veg_type_grid (a veg type has to be ascribed)  
     
     #Define main grids from previous files
-    sand_heights_grid = np.loadtxt(last_dir+'Final_sand_grid.txt', delimiter=',')
-    veg_grid = np.loadtxt(last_dir+'Final_veg_grid.txt', delimiter=',')
-    age_grid = np.loadtxt(last_dir+'Final_age_grid.txt', delimiter=',')
-    veg_type_grid = np.loadtxt(last_dir+'Final_veg_type_grid.txt', delimiter=',')
+    #sand_heights_grid = np.loadtxt('Final_sand_grid_barchans1', delimiter=',')
+    #veg_grid = np.loadtxt('/Users/jeromemayaud/Documents/University/Oxford/DPhil/RESULTS/Modelling/Python/MODEL/MODEL_v6/Veg_grid', delimiter=',')
     
     #Define secondary grids depending on the main grids    
     walls_presence_grid = np.zeros((Nr, Nc)); walls_presence_grid[np.where(walls_grid > 0)] = 1 #Fill grid with 1's where walls are present     

@@ -14,8 +14,8 @@ import math
 #*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
 #Grid
-Nr = 200 #Number of rows in grid (i.e. y axis)
-Nc = 200 #Number of columns in grid (i.e. x axis)
+Nr = 205 #Number of rows in grid (i.e. y axis)
+Nc = 205 #Number of columns in grid (i.e. x axis)
 cell_width = 5 #Width of a cell (m)a
 manual_initialisation = 'off' #'on' or 'off' - On means the veg and sand grids are manually specified in the 'startgrids_manual' function; off means grids are specified in the 'startgrids' functions
 last_dir = '/home/phillgb/projects/def-kingj/phillgb/simulation200_series/' #Specify the directory where output files can be found to manually specify starting state of the next simulation
@@ -40,7 +40,7 @@ shrub_proportion = 0.10 #Proportion of the veg distribution that is shrub (must 
 tree_proportion = 0.05 #Proportion of the veg distribution that is tree (must sum to 1 with grass and shrub)
 
 #Time
-model_iterations = 120 #Total number of iterations model is running
+model_iterations = 24 #Total number of iterations model is running
 wind_event_frequency = 1 #Frequency at which wind event occurs (i.e. 5 = one wind event every 5 model iterations)
 wind_resolution = 300  #Equivalent time for which wind is blowing during each wind event (MINUTES)
 veg_update_frequency = 6 #Frequency at which veg is updated using the veg patterning module (i.e. 10 = one update every 10 model iterations)
@@ -57,7 +57,7 @@ windspeed_stochasticity = 'off' #'on' adds stochasticity to windspeed in each ce
 wind_event_constant = 7.5 #For 'constant' (m/s) <--- Unobstructed windspeed entering grid for that timestep
 wind_event_start = 2; wind_event_end = 10 #For 'trend', 'v-shaped' (m/s) <--- Unobstructed windspeed entering grid for that timestep
 windspeed_threshold = 5.0 #Windspeed threshold over which sand transport occurs (m/s)
-wind_angle_array = [190] #Angle of wind entering grid for that time step (degrees) (Array is repeated the number of wind iterations)
+wind_angle_array = [120] #Angle of wind entering grid for that time step (degrees) (Array is repeated the number of wind iterations)
 weibull_shape_parameter = 1.6 #Shape parameter for Weibull distribution if 'wind_event_timeseries' is set to 'weibull'
 weibull_scale_parameter = 3.4 #Scale parameter for Weibull distribution if 'wind_event_timeseries' is set to 'weibull'
 
@@ -78,7 +78,7 @@ beta_start = 0.1; beta_end = 0.1 #Red noise annual variation parameter
 rainfall_series_gradient = 0.3 #For 'vertical' and 'corner' of spatial
 
 #Vegetation
-sed_balance_stress_switch = 'on' #'off' if sediment stress is always zero; 'on' if sediment stress is allowed to vary with sediment movement
+sed_balance_stress_switch = 'off' #'off' if sediment stress is always zero; 'on' if sediment stress is allowed to vary with sediment movement
 recolonisation_dynamism = 'on' #'off' means grass/tree/shrub proportions remain the same at every run; 'on' means plant recolonisation is dynamically dependent on current proportions of grass/shrub/tree in the domain
 max_height_grass = 1.0 #Maximum height a grass will ever reach if it has full biomass
 max_height_shrub = 1.5 #Maximum height a shrub will ever reach if it has full biomass
@@ -92,8 +92,8 @@ fire_event_timeseries = 'none' #Type of fire regime imposed: 'none', 'single', '
 grazing_event_timeseries = 'GrAM' #Type of grazing regime imposed: 'none', 'constant', 'periodic', 'GrAM'
 fire_event_single = 24 #For 'single' fire regime - month at which a single fire event occurs
 fire_event_frequency = 12 #For 'periodic' fire regime - how often a fire happens - ideally, should be divisible by the veg_update_freq_equivalent (months)
-grazing_event_frequency = 12 #For 'periodic' grazing frequency - how often a grazing event occurs - ideally, should be divisible by the veg_update_freq_equivalent (months)
-stocking_rate = 0.15 #For grazing - number of livestock per hectare (typically up to ~0.06; above 0.06 counts as severely degraded)
+grazing_event_frequency = 1 #For 'periodic' grazing frequency - how often a grazing event occurs - ideally, should be divisible by the veg_update_freq_equivalent (months)
+stocking_rate = 0.06 #For grazing - number of livestock per hectare (typically up to ~0.06; above 0.06 counts as severely degraded)
 
 #*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 #                             SEMI-FIXED PARAMETERS   

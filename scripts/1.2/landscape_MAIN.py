@@ -30,7 +30,7 @@ initial_sand_heights_grid, rooting_heights_grid, initial_veg_grid, initial_appar
 
 #Define arrays needed to fill with data
 (rainfall_days, total_sand_vol, total_aval_vol, total_veg_pop, average_age_table, veg_proportions, exposed_wall_proportions, differences_grid,
- avalanching_grid, windspeed_grid, interaction_field, grazer_passage_grid, avail_forage, veg_growth_factor, actual_grazed_series, veg_growth_mass) = startarrays()
+ avalanching_grid, windspeed_grid, interaction_field, grazer_passage_grid, last_grazer_passage, avail_forage, veg_growth_factor, actual_grazed_series, veg_growth_mass) = startarrays()
 
 #Define stress series (i.e. rainfall, windspeed, fire, grazing)
 rainfall_series = define_rainfall_series() #Define rainfall time series for veg update routine
@@ -136,8 +136,9 @@ for t in range(model_iterations):
         past_grass_grid = np.zeros((Nr, Nc))
         present_grass_grid = np.zeros((Nr, Nc))
         past_grass_grid[np.where(veg_type_grid == 1)] = veg_grid[np.where(veg_type_grid == 1)] # Make a copy of height grid of grass for calculating the vegetation growth mass.
-        
-        veg_grid, veg_type_grid, age_grid, cum_growth_grid, actual_biomass_grid, veg_occupation_grid, rooting_heights_grid, trunks_grid, porosity_grid, drought_grid, grid, interaction_field, veg_population, average_age_array, current_grass_proportion, current_shrub_proportion, current_tree_proportion, mean_veg_gain = veg_update(veg_grid, veg_type_grid, age_grid, sand_heights_grid, cum_growth_grid, actual_biomass_grid, veg_occupation_grid, rooting_heights_grid, trunks_grid, porosity_grid, drought_grid, grid, walls_grid, rainfall_series, veg_t, fire_event, grazing_event)
+        graz_update = grazer_passage_grid - last_grazer_passage # Store the difference in grazer passage between current and last state of grazer passage grid in new grid
+
+        veg_grid, veg_type_grid, age_grid, cum_growth_grid, actual_biomass_grid, veg_occupation_grid, rooting_heights_grid, trunks_grid, porosity_grid, drought_grid, grid, interaction_field, veg_population, average_age_array, current_grass_proportion, current_shrub_proportion, current_tree_proportion, mean_veg_gain = veg_update(veg_grid, veg_type_grid, age_grid, sand_heights_grid, cum_growth_grid, actual_biomass_grid, veg_occupation_grid, rooting_heights_grid, trunks_grid, porosity_grid, drought_grid, grid, walls_grid, rainfall_series, veg_t, fire_event, grazing_event, graz_update)
         total_veg_pop[veg_t] = veg_population
         average_age_table[veg_t, 0] = average_age_array[0]; average_age_table[veg_t, 1] = average_age_array[1]; average_age_table[veg_t, 2] = average_age_array[2]
         veg_proportions[veg_t, 0] = current_grass_proportion; veg_proportions[veg_t, 1] = current_shrub_proportion; veg_proportions[veg_t, 2] = current_tree_proportion        
@@ -146,7 +147,8 @@ for t in range(model_iterations):
         veg_growth_factor[veg_t, 0] = mean_veg_gain[0]; veg_growth_factor[veg_t, 1] = mean_veg_gain[1]; veg_growth_factor[veg_t, 2] = mean_veg_gain[2]
         present_grass_grid[np.where(veg_type_grid == 1)] = veg_grid[np.where(veg_type_grid == 1)] #Make a copy of grass height on a blank array to allow calculation of vegetation growth mass.
         diff_grass_grid = present_grass_grid - past_grass_grid
-        veg_growth_mass[veg_t] = np.sum(diff_grass_grid[np.where(diff_grass_grid > 0)])*np.power(cell_width, 2)*grass_vmass #Keep track of the amount of grass grown this iteration 
+        veg_growth_mass[veg_t] = np.sum(diff_grass_grid[np.where(diff_grass_grid > 0)])*np.power(cell_width, 2)*grass_vmass #Keep track of the amount of grass grown this iteration
+        last_grazer_passage = grazer_passage_grid # Update last state of grazer passage grid after vegetation update. 
         
         veg_t += 1      
         print("Veg is updated. Veg density =", round(veg_population/(Nr*Nc), 2))
