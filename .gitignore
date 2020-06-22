@@ -16,4 +16,4 @@ simulationsARRAY_gen.sh
 
 # Keep only the lastest version of the model in repository
 script/*
-!/script/2.2/
+!script/2.2/
