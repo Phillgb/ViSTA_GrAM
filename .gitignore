@@ -1,6 +1,9 @@
 # ----------------------------------------------------
 # List of Ignored Files for the ViSTA MBAH project
 # ----------------------------------------------------
+# Ignore temp or cached files and folder
+**/__pycache__
+**/.vscode
 
 # Ignore results files and originals scripts of the model
 analysis/
@@ -16,4 +19,4 @@ simulationsARRAY_gen.sh
 
 # Keep only the lastest version of the model in repository
 script/*
-!script/2.2/
+!script/2.2/*
