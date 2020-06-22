@@ -13,3 +13,7 @@ Series_table.xlsx
 
 # Ignore shell scripts for workload managing on calcul server
 simulationsARRAY_gen.sh
+
+# Keep only the lastest version of the model in repository
+script/*
+!/script/2.2
