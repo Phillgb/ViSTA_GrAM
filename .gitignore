@@ -15,5 +15,6 @@ Series_table.xlsx
 simulationsARRAY_gen.sh
 
 # Keep only the lastest version of the model in repository
+!/script
 script/*
 !/script/2.2
