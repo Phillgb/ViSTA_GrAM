@@ -24,13 +24,16 @@ like any other parameter of the model.
 ## Dependency
 
 The ViSTA_GrAM model is written in Python 3.7.7.
+
 The main packages used by the model are: 
+    
     - Scipy
     - Numpy
     - Matplotlib
     - Mesa
 
 A requirement.txt file is also disponible to help create an environment in which the model can be executed and have its outputs analysed.
+
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 ## Copyright note: 
 
